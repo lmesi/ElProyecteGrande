@@ -19,6 +19,7 @@
     <ItemGroup>
       <Folder Include="Controllers" />
       <Folder Include="DAL\DatabaseConnection" />
+      <Folder Include="db\" />
       <Folder Include="Service" />
     </ItemGroup>
 
