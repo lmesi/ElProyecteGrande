@@ -1,4 +1,3 @@
-using Backend.Data;
 using Backend.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +14,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -29,25 +26,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-CreateDbIfNotExists(app);
-app.Run();
 
-static void CreateDbIfNotExists(WebApplication application)
-{
-    Console.WriteLine("init INIT init INIT");
-    using (var scope = application.Services.CreateScope())
-    {
-        var services = scope.ServiceProvider;
-        try
-        {
-            Console.WriteLine("TRY");
-            var context = services.GetRequiredService<SpeedyContext>();
-            DbInitializer.Initialize(context);
-        }
-        catch (Exception ex)
-        {
-            var logger = services.GetRequiredService<ILogger<Program>>();
-            logger.LogError(ex, "An error occurred creating the DB.");
-        }
-    }
-}
+app.Run();
