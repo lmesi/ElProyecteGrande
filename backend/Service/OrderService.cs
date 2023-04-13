@@ -1,6 +1,7 @@
 using System.Data;
 using Backend.Model;
 using Backend.Model.DTO;
+using Backend.Model.dtoToShow;
 using Backend.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,22 +39,24 @@ public class OrderService : IOrderService
         }
     }
 
-    public async Task<OrderDto> GetOrder(long id)
+    public async Task<OrderToShow> GetOrder(long id)
     {
         List<Order> orders =
-            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o=>o.Goods).ToListAsync();
+            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o => o.Goods)
+                .ToListAsync();
         var order = orders.FirstOrDefault(o => o.Id == id);
         if (order != null)
-            return OrderDto(order);
-        return new OrderDto();
+            return OrderToShow(order);
+        return new OrderToShow();
     }
 
 
-    public async Task<List<OrderDto>> GetAllOrders()
+    public async Task<List<OrderToShow>> GetAllOrders()
     {
-        List<OrderDto> orders =
-            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o => o.Goods).ToListAsync())
-            .Select(order => OrderDto(order)).ToList();
+        List<OrderToShow> orders =
+            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o => o.Goods)
+                .ToListAsync())
+            .Select(order => OrderToShow(order)).ToList();
         return orders;
     }
 
@@ -102,8 +105,8 @@ public class OrderService : IOrderService
             return false;
         }
     }
-    
-    public async Task<List<OrderDto>> GetOrdersByDriverId(long driverId)
+
+    public async Task<List<OrderToShow>> GetOrdersByDriverId(long driverId)
     {
         try
         {
@@ -113,7 +116,7 @@ public class OrderService : IOrderService
                 .Where(order => order.Driver.Id.Equals(driverId))
                 .Where(order => order.UnloadingDate == null)
                 .ToListAsync();
-        
+
             var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver)
                 .Where(order => order.Driver.Id.Equals(driverId))
                 .Where(order => order.UnloadingDate != null)
@@ -121,25 +124,26 @@ public class OrderService : IOrderService
                 .Take(2)
                 .ToListAsync();
 
-            var orders = uncompletedOrdersByDriver.Concat(completedOrdersByDriver).Select(order => OrderDto(order)).ToList();
-        
+            var orders = uncompletedOrdersByDriver.Concat(completedOrdersByDriver).Select(order => OrderToShow(order))
+                .ToList();
+
             return orders;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return new List<OrderDto>();
+            return new List<OrderToShow>();
         }
     }
 
-    private OrderDto OrderDto(Order order)
+    private OrderToShow OrderToShow(Order order)
     {
-        return new OrderDto()
+        return new OrderToShow()
         {
             Id = order.Id,
-            CompanyId = order.Company.Id,
-            DriverId = order.Driver.Id,
-            GoodsId = order.Goods.Id,
+            CompanyName = order.Company.Name,
+            DriverName = order.Driver.Name,
+            GoodsName = order.Goods.Name,
             LoadingAddress = order.LoadingAddress,
             UnloadingAddress = order.UnloadingAddress,
             UnloadingDate = order.UnloadingDate

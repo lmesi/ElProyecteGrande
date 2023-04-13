@@ -1,4 +1,5 @@
 using Backend.Model.DTO;
+using Backend.Model.dtoToShow;
 using Backend.Model.Entities;
 
 namespace Backend.Service;
@@ -6,9 +7,9 @@ namespace Backend.Service;
 public interface IOrderService
 {
     Task<bool> AddOrder(OrderDto orderDto);
-    Task<OrderDto> GetOrder(long id);
-    Task<List<OrderDto>> GetAllOrders();
+    Task<OrderToShow> GetOrder(long id);
+    Task<List<OrderToShow>> GetAllOrders();
     Task<bool> UpdateOrder(long id, OrderDto orderDto);
     Task<bool> DeleteOrder(long id);
-    Task<List<OrderDto>> GetOrdersByDriverId(long driverId);
+    Task<List<OrderToShow>> GetOrdersByDriverId(long driverId);
 }
