@@ -40,21 +40,12 @@ public class OrderService : IOrderService
 
     public async Task<OrderDto> GetOrder(long id)
     {
-        try
-        {
-            List<Order> orders =
+        List<Order> orders =
                 await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync();
             var order = orders.FirstOrDefault(o => o.Id == id);
             if (order != null)
                 return OrderDto(order);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-
-        return new OrderDto();
+            return new OrderDto();
     }
 
 
