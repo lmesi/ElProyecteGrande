@@ -26,6 +26,7 @@ public class DriverService : IDriverService
         
             var completedOrdersByDriver = await _context.Orders.Include(order => order.Driver)
                 .Where(order => order.Driver.Id.Equals(driverId))
+                .Where(order => order.UnloadingDate != null)
                 .OrderByDescending(order => order.UnloadingDate)
                 .Take(2)
                 .ToListAsync();
