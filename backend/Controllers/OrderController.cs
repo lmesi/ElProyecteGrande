@@ -27,7 +27,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> AddOrder([FromBody] OrderDto orderDto)
     {
         bool success = await _orderService.AddOrder(orderDto);
-        return success ? Ok("New order added") : Content(ErrorMessage);
+        return success ? Ok("New order added") : StatusCode(400, ErrorMessage);
     }
 
     [HttpGet("{id}")]
@@ -41,13 +41,13 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> UpdateOrderById(long id, [FromBody] OrderDto orderDto)
     {
         bool success = await _orderService.UpdateOrder(id, orderDto);
-        return success ? Ok("Order updated") : Content(ErrorMessage);
+        return success ? Ok("Order updated") : StatusCode(400, ErrorMessage);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOrder(long id)
     {
         bool success = await _orderService.DeleteOrder(id);
-        return success ? Ok("Order deleted") : Content(ErrorMessage);
+        return success ? Ok("Order deleted") : StatusCode(400, ErrorMessage);
     }
 }
