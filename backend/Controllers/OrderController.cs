@@ -50,4 +50,11 @@ public class OrderController : ControllerBase
         bool success = await _orderService.DeleteOrder(id);
         return success ? Ok("Order deleted") : StatusCode(400, ErrorMessage);
     }
+    
+    [HttpGet("/Driver/{driverId}")]
+    public async Task<IActionResult> GetOrdersByDriverId(long driverId)
+    {
+        var orders = await _orderService.GetOrdersByDriverId(driverId);
+        return Ok(orders);
+    }
 }
