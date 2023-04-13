@@ -67,12 +67,17 @@ public class OrderService : IOrderService
             var order = await _speedyContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
             if (order != null)
             {
-                order.Company = await _speedyContext.Companies.FirstAsync(c => c.Id == orderDto.CompanyId);
-                order.Driver = await _speedyContext.Drivers.FirstAsync(d => d.Id == orderDto.DriverId);
-                order.Goods = await _speedyContext.Goods.FirstAsync(g => g.Id == orderDto.GoodsId);
-                order.LoadingAddress = orderDto.LoadingAddress;
-                order.UnloadingAddress = orderDto.UnloadingAddress;
-                order.UnloadingDate = orderDto.UnloadingDate;
+                var company = await _speedyContext.Companies.FirstOrDefaultAsync(c => c.Id == orderDto.CompanyId);
+                order.Company = (company != null) ? company : order.Company;
+                var driver = await _speedyContext.Drivers.FirstOrDefaultAsync(d => d.Id == orderDto.DriverId);
+                order.Driver = (driver != null)?driver:order.Driver;
+                var goods = await _speedyContext.Goods.FirstOrDefaultAsync(g => g.Id == orderDto.GoodsId);
+                order.Goods = (goods != null)?goods:order.Goods;
+                order.LoadingAddress = (orderDto.LoadingAddress != null)?orderDto.LoadingAddress:order.LoadingAddress;
+                var unloadingAddress = orderDto.UnloadingAddress;
+                order.UnloadingAddress = (unloadingAddress != null)?unloadingAddress:order.UnloadingAddress;
+                var unloadingDate = orderDto.UnloadingDate;
+                order.UnloadingDate = (unloadingDate != null)?unloadingDate:order.UnloadingDate;
                 _speedyContext.Orders.Update(order);
                 await _speedyContext.SaveChangesAsync();
                 return true;
