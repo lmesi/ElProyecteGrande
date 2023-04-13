@@ -37,15 +37,9 @@ public class CompanyService : ICompanyService
     
     public async Task<List<Company>> GetAllCompanies()
     {
-        try
-        {
-            return await _context.Companies.Include(company => company.Orders).ToListAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        
+        return await _context.Companies.Include(company => company.Orders).ToListAsync();
+        
     }
 
     public async Task<bool> UpdateCompany(CompanyDto companyDto, long id)
