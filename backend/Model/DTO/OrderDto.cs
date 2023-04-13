@@ -10,7 +10,7 @@ public class OrderDto
     public long CompanyId { get; set; }
     public string LoadingAddress { get; set; }
     public string UnloadingAddress { get; set; }
-    public DateTime UnloadingDate { get; set; }
+    public DateTime? UnloadingDate { get; set; } = null;
     public long DriverId { get; set; }
     public Goods Goods { get; set; }
 }

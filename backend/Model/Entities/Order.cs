@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Model.Enum;
 
 namespace Backend.Model.Entities;
@@ -12,8 +11,7 @@ public class Order
     public Company Company { get; set; }
     public string LoadingAddress { get; set; }
     public string UnloadingAddress { get; set; }
-    public DateTime UnloadingDate { get; set; }
+    public DateTime? UnloadingDate { get; set; } = null;
     public Driver Driver { get; set; }
     public Goods Goods { get; set; }
-    
 }

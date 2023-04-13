@@ -61,7 +61,7 @@ namespace Backend.Migrations
                     CompanyId = table.Column<long>(type: "INTEGER", nullable: false),
                     LoadingAddress = table.Column<string>(type: "TEXT", nullable: false),
                     UnloadingAddress = table.Column<string>(type: "TEXT", nullable: false),
-                    UnloadingDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UnloadingDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     DriverId = table.Column<long>(type: "INTEGER", nullable: false),
                     Goods = table.Column<int>(type: "INTEGER", nullable: false)
                 },
