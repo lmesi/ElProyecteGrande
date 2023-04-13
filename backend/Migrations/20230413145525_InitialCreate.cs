@@ -53,6 +53,19 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Goods",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Goods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -63,7 +76,7 @@ namespace Backend.Migrations
                     UnloadingAddress = table.Column<string>(type: "TEXT", nullable: false),
                     UnloadingDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     DriverId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Goods = table.Column<int>(type: "INTEGER", nullable: false)
+                    GoodsId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,6 +93,12 @@ namespace Backend.Migrations
                         principalTable: "Drivers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Goods_GoodsId",
+                        column: x => x.GoodsId,
+                        principalTable: "Goods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -91,6 +110,11 @@ namespace Backend.Migrations
                 name: "IX_Orders_DriverId",
                 table: "Orders",
                 column: "DriverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_GoodsId",
+                table: "Orders",
+                column: "GoodsId");
             
             //admins
             migrationBuilder.Sql("INSERT INTO Admins (Name, Role) VALUES ('Admin 1','1')");
@@ -104,6 +128,15 @@ namespace Backend.Migrations
             //companies
             migrationBuilder.Sql("INSERT INTO Companies (Name, Address) VALUES ('Company 1','Oslo(N)')");
             migrationBuilder.Sql("INSERT INTO Companies (Name, Address) VALUES ('Company 2', 'Budapest(H)')");
+            
+            //goods
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Sand')");
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Wheat')");
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Oat')");
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Rye')");
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Barley')");
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Corn')");
+            migrationBuilder.Sql("INSERT INTO Goods (Name) VALUES ('Rice')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -119,6 +152,9 @@ namespace Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Drivers");
+
+            migrationBuilder.DropTable(
+                name: "Goods");
         }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(SpeedyContext))]
-    [Migration("20230411182029_InitialCreate")]
+    [Migration("20230413145525_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,21 @@ namespace Backend.Migrations
                     b.ToTable("Drivers");
                 });
 
+            modelBuilder.Entity("Backend.Model.Entities.Goods", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Goods");
+                });
+
             modelBuilder.Entity("Backend.Model.Entities.Order", b =>
                 {
                     b.Property<long>("Id")
@@ -90,7 +105,7 @@ namespace Backend.Migrations
                     b.Property<long>("DriverId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Goods")
+                    b.Property<long>("GoodsId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("LoadingAddress")
@@ -101,7 +116,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UnloadingDate")
+                    b.Property<DateTime?>("UnloadingDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -109,6 +124,8 @@ namespace Backend.Migrations
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("DriverId");
+
+                    b.HasIndex("GoodsId");
 
                     b.ToTable("Orders");
                 });
@@ -127,9 +144,17 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Backend.Model.Entities.Goods", "Goods")
+                        .WithMany("Orders")
+                        .HasForeignKey("GoodsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Company");
 
                     b.Navigation("Driver");
+
+                    b.Navigation("Goods");
                 });
 
             modelBuilder.Entity("Backend.Model.Entities.Company", b =>
@@ -138,6 +163,11 @@ namespace Backend.Migrations
                 });
 
             modelBuilder.Entity("Backend.Model.Entities.Driver", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Backend.Model.Entities.Goods", b =>
                 {
                     b.Navigation("Orders");
                 });

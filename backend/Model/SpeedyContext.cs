@@ -18,5 +18,5 @@ public class SpeedyContext : DbContext
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<GoodsEntity> Goods { get; set; }
+    public DbSet<Goods> Goods { get; set; }
 }

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Backend.Model.Enum;
+using Backend.Model.Entities;
 
 namespace Backend.Model.DTO;
 
@@ -12,5 +12,5 @@ public class OrderDto
     public string UnloadingAddress { get; set; }
     public DateTime? UnloadingDate { get; set; } = null;
     public long DriverId { get; set; }
-    public Goods Goods { get; set; }
+    public long GoodsId { get; set; }
 }

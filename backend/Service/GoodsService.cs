@@ -27,7 +27,7 @@ public class GoodsService : IGoodsService
     {
         try
         {
-            _speedyContext.Goods.Add(new GoodsEntity
+            _speedyContext.Goods.Add(new Goods
             {
                 Name = goods.Name,
                 Orders = new List<Order>()
