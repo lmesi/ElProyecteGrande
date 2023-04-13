@@ -41,28 +41,20 @@ public class OrderService : IOrderService
     public async Task<OrderDto> GetOrder(long id)
     {
         List<Order> orders =
-                await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync();
-            var order = orders.FirstOrDefault(o => o.Id == id);
-            if (order != null)
-                return OrderDto(order);
-            return new OrderDto();
+            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync();
+        var order = orders.FirstOrDefault(o => o.Id == id);
+        if (order != null)
+            return OrderDto(order);
+        return new OrderDto();
     }
 
 
     public async Task<List<OrderDto>> GetAllOrders()
     {
-        try
-        {
-            List<OrderDto> orders =
-                (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync())
-                .Select(order => OrderDto(order)).ToList();
-            return orders;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        List<OrderDto> orders =
+            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync())
+            .Select(order => OrderDto(order)).ToList();
+        return orders;
     }
 
     public async Task<bool> UpdateOrder(long id, OrderDto orderDto)
@@ -82,6 +74,7 @@ public class OrderService : IOrderService
                 await _speedyContext.SaveChangesAsync();
                 return true;
             }
+
             return false;
         }
         catch (Exception e)
@@ -99,8 +92,9 @@ public class OrderService : IOrderService
             {
                 _speedyContext.Orders.Remove(order);
                 await _speedyContext.SaveChangesAsync();
-            return true;
+                return true;
             }
+
             return false;
         }
         catch (Exception e)

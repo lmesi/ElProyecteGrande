@@ -20,7 +20,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> GetAllOrders()
     {
         var orders = await _orderService.GetAllOrders();
-        return orders.Count == 0 ? NotFound() : Ok(orders);
+        return Ok(orders);
     }
 
     [HttpPost]
