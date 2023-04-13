@@ -100,12 +100,12 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpPut("admin")]
-        public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin)
+        [HttpPut("admin/{id}")]
+        public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin, long id)
         {
             try
             {
-                await _userService.UpdateAdmin(admin);
+                await _userService.UpdateAdmin(admin, id);
                 return Ok();
             }
             catch (Exception ex)
@@ -114,12 +114,12 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpPut("driver")]
-        public async Task<IActionResult> UpdateDriver([FromBody] Driver driver)
+        [HttpPut("driver/{id}")]
+        public async Task<IActionResult> UpdateDriver([FromBody] Driver driver, long id)
         {
             try
             {
-                await _userService.UpdateDriver(driver);
+                await _userService.UpdateDriver(driver, id);
                 return Ok();
             }
             catch (Exception ex)

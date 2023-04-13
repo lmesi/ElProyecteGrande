@@ -14,8 +14,8 @@ public interface IUserService
 
     Task<List<DriverDto>> GetAllDrivers();
     Task<List<Admin>> GetAllAdmins();
-    Task UpdateDriver(Driver driver);
-    Task UpdateAdmin(Admin admin);
+    Task UpdateDriver(Driver driver, long id);
+    Task UpdateAdmin(Admin admin, long id);
 
     Task DeleteDriver(long id);
     Task DeleteAdmin(long id);

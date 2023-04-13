@@ -1,6 +1,7 @@
 ﻿using Backend.Model;
 using Backend.Model.DTO;
 using Backend.Model.Entities;
+using Backend.Model.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Service;
@@ -26,7 +27,8 @@ public class UserService : IUserService
         var driver = new Driver
         {
             Name = driverDto.Name,
-            LicensePlate = driverDto.LicensePlate
+            LicensePlate = driverDto.LicensePlate,
+            Role = Role.Driver
         };
         _context.Drivers.Add(driver);
         await _context.SaveChangesAsync();
@@ -56,7 +58,8 @@ public class UserService : IUserService
                 Id = d.Id,
                 Name = d.Name,
                 LicensePlate = d.LicensePlate,
-                OrderIds = d.Orders.Select(o => o.Id).ToList()
+                OrderIds = d.Orders.Select(o => o.Id).ToList(),
+                Role = Role.Driver
             })
             .FirstOrDefaultAsync();
 
@@ -70,7 +73,8 @@ public class UserService : IUserService
             Id = driver.Id,
             Name = driver.Name,
             LicensePlate = driver.LicensePlate,
-            OrderIds = driver.OrderIds
+            OrderIds = driver.OrderIds,
+            Role = Role.Driver
         };
     }
 
@@ -94,27 +98,29 @@ public class UserService : IUserService
     }
 
 
-    public async Task UpdateAdmin(Admin admin)
+    public async Task UpdateAdmin(Admin admin, long id)
     {
-        var existingUser = await GetAdmin(admin.Id);
+        var existingUser = await GetAdmin(id);
         if (existingUser == null)
         {
             throw new ArgumentException($"User with Id {admin.Id} does not exist");
         }
-        
+
+        admin.Id = id;
         _context.Entry(existingUser).State = EntityState.Detached;
         _context.Entry(admin).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateDriver(Driver driver)
+    public async Task UpdateDriver(Driver driver, long id)
     {
-        var existingUser = await GetAdmin(driver.Id);
+        var existingUser = await GetAdmin(id);
         if (existingUser == null)
         {
             throw new ArgumentException($"User with Id {driver.Id} does not exist");
         }
-        
+
+        driver.Id = id;
         _context.Entry(existingUser).State = EntityState.Detached;
         _context.Entry(driver).State = EntityState.Modified;
         await _context.SaveChangesAsync();
