@@ -102,6 +102,35 @@ public class OrderService : IOrderService
             return false;
         }
     }
+    
+    public async Task<List<OrderDto>> GetOrdersByDriverId(long driverId)
+    {
+        try
+        {
+            var uncompletedOrdersByDriver = await _speedyContext.Orders
+                .Include(order => order.Driver)
+                .Include(order => order.Company)
+                .Where(order => order.Driver.Id.Equals(driverId))
+                .Where(order => order.UnloadingDate == null)
+                .ToListAsync();
+        
+            var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver)
+                .Where(order => order.Driver.Id.Equals(driverId))
+                .Where(order => order.UnloadingDate != null)
+                .OrderByDescending(order => order.UnloadingDate)
+                .Take(2)
+                .ToListAsync();
+
+            var orders = uncompletedOrdersByDriver.Concat(completedOrdersByDriver).Select(order => OrderDto(order)).ToList();
+        
+            return orders;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return new List<OrderDto>();
+        }
+    }
 
     private OrderDto OrderDto(Order order)
     {
