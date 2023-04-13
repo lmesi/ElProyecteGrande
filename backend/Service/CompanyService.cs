@@ -34,6 +34,7 @@ public class CompanyService : ICompanyService
             return false;
         }
     }
+    
     public async Task<List<Company>> GetAllCompanies()
     {
         try
