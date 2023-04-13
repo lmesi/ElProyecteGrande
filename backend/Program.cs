@@ -10,8 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<SpeedyContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConfiguration")));
 builder.Services.AddTransient<IOrderService, OrderService>();
-
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
