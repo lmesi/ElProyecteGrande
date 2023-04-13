@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Backend.Model;
 using Backend.Service;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SpeedyContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConfiguration")));
-
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICompanyService, CompanyService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 
