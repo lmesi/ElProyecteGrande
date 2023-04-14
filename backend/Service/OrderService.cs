@@ -68,17 +68,19 @@ public class OrderService : IOrderService
             if (order != null)
             {
                 var company = await _speedyContext.Companies.FirstOrDefaultAsync(c => c.Id == orderDto.CompanyId);
-                order.Company = (company != null) ? company : order.Company;
                 var driver = await _speedyContext.Drivers.FirstOrDefaultAsync(d => d.Id == orderDto.DriverId);
-                order.Driver = (driver != null)?driver:order.Driver;
                 var goods = await _speedyContext.Goods.FirstOrDefaultAsync(g => g.Id == orderDto.GoodsId);
-                order.Goods = (goods != null)?goods:order.Goods;
-                order.LoadingAddress = (orderDto.LoadingAddress != null)?orderDto.LoadingAddress:order.LoadingAddress;
-                var unloadingAddress = orderDto.UnloadingAddress;
-                order.UnloadingAddress = (unloadingAddress != null)?unloadingAddress:order.UnloadingAddress;
-                var unloadingDate = orderDto.UnloadingDate;
-                order.UnloadingDate = (unloadingDate != null)?unloadingDate:order.UnloadingDate;
-                _speedyContext.Orders.Update(order);
+
+                order.Company = (company != null) ? company : order.Company;
+                order.Driver = (driver != null) ? driver : order.Driver;
+                order.Goods = (goods != null) ? goods : order.Goods;
+                order.LoadingAddress =
+                    (orderDto.LoadingAddress != null) ? orderDto.LoadingAddress : order.LoadingAddress;
+                order.UnloadingAddress = (orderDto.UnloadingAddress != null)
+                    ? orderDto.UnloadingAddress
+                    : order.UnloadingAddress;
+                order.UnloadingDate = (orderDto.UnloadingDate != null) ? orderDto.UnloadingDate : order.UnloadingDate;
+                
                 await _speedyContext.SaveChangesAsync();
                 return true;
             }
@@ -118,12 +120,13 @@ public class OrderService : IOrderService
             var uncompletedOrdersByDriver = await _speedyContext.Orders
                 .Include(order => order.Driver)
                 .Include(order => order.Company)
-                .Include(order=>order.Goods)
+                .Include(order => order.Goods)
                 .Where(order => order.Driver.Id.Equals(driverId))
                 .Where(order => order.UnloadingDate == null)
                 .ToListAsync();
 
-            var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver).Include(order => order.Company).Include(order=>order.Goods)
+            var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver)
+                .Include(order => order.Company).Include(order => order.Goods)
                 .Where(order => order.Driver.Id.Equals(driverId))
                 .Where(order => order.UnloadingDate != null)
                 .OrderByDescending(order => order.UnloadingDate)
