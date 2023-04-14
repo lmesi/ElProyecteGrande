@@ -118,11 +118,12 @@ public class OrderService : IOrderService
             var uncompletedOrdersByDriver = await _speedyContext.Orders
                 .Include(order => order.Driver)
                 .Include(order => order.Company)
+                .Include(order=>order.Goods)
                 .Where(order => order.Driver.Id.Equals(driverId))
                 .Where(order => order.UnloadingDate == null)
                 .ToListAsync();
 
-            var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver)
+            var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver).Include(order => order.Company).Include(order=>order.Goods)
                 .Where(order => order.Driver.Id.Equals(driverId))
                 .Where(order => order.UnloadingDate != null)
                 .OrderByDescending(order => order.UnloadingDate)
