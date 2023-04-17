@@ -24,7 +24,7 @@ public class OrderService : IOrderService
                 Company = await _speedyContext.Companies.FirstAsync(c => c.Id == orderDto.CompanyId),
                 Driver = await _speedyContext.Drivers.FirstAsync(d => d.Id == orderDto.DriverId),
                 Id = orderDto.Id,
-                Goods = orderDto.Goods,
+                Goods = await _speedyContext.Goods.FirstAsync(g => g.Id == orderDto.GoodsId),
                 LoadingAddress = orderDto.LoadingAddress,
                 UnloadingAddress = orderDto.UnloadingAddress
             };
@@ -41,7 +41,7 @@ public class OrderService : IOrderService
     public async Task<OrderDto> GetOrder(long id)
     {
         List<Order> orders =
-            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync();
+            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o=>o.Goods).ToListAsync();
         var order = orders.FirstOrDefault(o => o.Id == id);
         if (order != null)
             return OrderDto(order);
@@ -52,7 +52,7 @@ public class OrderService : IOrderService
     public async Task<List<OrderDto>> GetAllOrders()
     {
         List<OrderDto> orders =
-            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).ToListAsync())
+            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o => o.Goods).ToListAsync())
             .Select(order => OrderDto(order)).ToList();
         return orders;
     }
@@ -66,7 +66,7 @@ public class OrderService : IOrderService
             {
                 order.Company = await _speedyContext.Companies.FirstAsync(c => c.Id == orderDto.CompanyId);
                 order.Driver = await _speedyContext.Drivers.FirstAsync(d => d.Id == orderDto.DriverId);
-                order.Goods = orderDto.Goods;
+                order.Goods = await _speedyContext.Goods.FirstAsync(g => g.Id == orderDto.GoodsId);
                 order.LoadingAddress = orderDto.LoadingAddress;
                 order.UnloadingAddress = orderDto.UnloadingAddress;
                 order.UnloadingDate = orderDto.UnloadingDate;
@@ -139,7 +139,7 @@ public class OrderService : IOrderService
             Id = order.Id,
             CompanyId = order.Company.Id,
             DriverId = order.Driver.Id,
-            Goods = order.Goods,
+            GoodsId = order.Goods.Id,
             LoadingAddress = order.LoadingAddress,
             UnloadingAddress = order.UnloadingAddress,
             UnloadingDate = order.UnloadingDate
