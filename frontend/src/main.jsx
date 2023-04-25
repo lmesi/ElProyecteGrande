@@ -6,6 +6,7 @@ import App from './App'
 import './index.css'
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 import OrdersUpdatePage from './Pages/OrderUpdatePage'
+import AddNewOrder from './Pages/AddNewOrder'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/orders",
     element: <OrdersListPage />
+  },
+  {
+    path: "/admin/orders/addnew",
+    element: <AddNewOrder />
   },
 ])
 
