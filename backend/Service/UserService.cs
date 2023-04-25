@@ -67,6 +67,37 @@ public class UserService : IUserService
             Name = user.Name,
             LicensePlate = user.LicensePlate, 
             Password = user.Password,
+            Role = user.Role,
+            OrderIds = user.Orders.Select(o => o.Id).ToList()
+        }).ToList();
+    }
+    
+    public async Task<List<UserDto>> GetAllAdmin()
+    {
+        var users = await _context.Users.Include(user => user.Orders).ToListAsync();
+    
+        return users.Where(user => user.Role == Role.Admin).Select(user => new UserDto()
+        {
+            Id = user.Id,
+            Name = user.Name,
+            LicensePlate = user.LicensePlate, 
+            Password = user.Password,
+            Role = user.Role,
+            OrderIds = user.Orders.Select(o => o.Id).ToList()
+        }).ToList();
+    }
+    
+    public async Task<List<UserDto>> GetAllDriver()
+    {
+        var users = await _context.Users.Include(user => user.Orders).ToListAsync();
+    
+        return users.Where(user => user.Role == Role.Driver).Select(user => new UserDto()
+        {
+            Id = user.Id,
+            Name = user.Name,
+            LicensePlate = user.LicensePlate, 
+            Password = user.Password,
+            Role = user.Role,
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }

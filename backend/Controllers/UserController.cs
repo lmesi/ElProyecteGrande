@@ -58,6 +58,34 @@ namespace Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
+        [HttpGet("/admin")]
+        public async Task<IActionResult> GetAllAdmin()
+        {
+            try
+            {
+                var users = await _userService.GetAllAdmin();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("/driver")]
+        public async Task<IActionResult> GetAllDriver()
+        {
+            try
+            {
+                var users = await _userService.GetAllDriver();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser([FromBody] User user, long id)
