@@ -1,7 +1,7 @@
 import React from "react";
 import '../App.css'
 
-export default function CompanyPopUp({ setShowPopup, companyToDelete, setCompanies }) {
+export default function CompanyPopUp({ setShowPopup, companyToDelete, setCompanies, setCompaniesToShow }) {
 
     function handleCancel() {
         setShowPopup(false);
@@ -16,7 +16,10 @@ export default function CompanyPopUp({ setShowPopup, companyToDelete, setCompani
         }).then(() => {
             fetch("/api/Companies")
                 .then((response) => response.json())
-                .then((data) => setCompanies(data))
+                .then((data) => {
+                    setCompanies(data);
+                    setCompaniesToShow(data);
+                })
                 .catch((error) => console.log(error));
         })
             .catch(error => console.error(error));
