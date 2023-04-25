@@ -10,6 +10,6 @@ public class OrderToShow
     public string LoadingAddress { get; set; }
     public string UnloadingAddress { get; set; }
     public DateTime? UnloadingDate { get; set; } = null;
-    public string DriverName { get; set; }
+    public string UserName { get; set; }
     public string GoodsName { get; set; }
 }

@@ -1,6 +1,7 @@
 using Backend.Model.DTO;
 using Backend.Model.Entities;
 using Backend.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -51,10 +52,10 @@ public class OrderController : ControllerBase
         return success ? Ok("Order deleted") : StatusCode(400, ErrorMessage);
     }
     
-    [HttpGet("/Driver/{driverId}")]
-    public async Task<IActionResult> GetOrdersByDriverId(long driverId)
+    [HttpGet("/Driver/{userId}")]
+    public async Task<IActionResult> GetOrdersByUserId(long userId)
     {
-        var orders = await _orderService.GetOrdersByDriverId(driverId);
+        var orders = await _orderService.GetOrdersByUserId(userId);
         return Ok(orders);
     }
 }

@@ -14,148 +14,94 @@ public class UserService : IUserService
     {
         _context = context;
     }
-
-
-    public async Task AddAdmin(Admin admin)
+   
+    public async Task AddUser(UserDto userDto)
     {
-        _context.Admins.Add(admin);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task AddDriver(DriverDto driverDto)
-    {
-        var driver = new Driver
+        var user = new User
         {
-            Name = driverDto.Name,
-            LicensePlate = driverDto.LicensePlate,
-            Role = Role.Driver
+            Name = userDto.Name,
+            LicensePlate = userDto.LicensePlate,
+            Role = userDto.Role
         };
-        _context.Drivers.Add(driver);
+        _context.Users.Add(user);
         await _context.SaveChangesAsync();
     }
+   
 
-
-    public async Task<Admin> GetAdmin(long userId)
+    public async Task<UserDto> GetUser(long userId)
     {
-        var admin = await _context.Admins
-            .Where(r => r.Id == userId)
-            .FirstOrDefaultAsync();
-
-        if (admin == null)
-        {
-            throw new ArgumentException($"User with Id {admin.Id} does not exist");
-        }
-
-        return admin;
-    }
-
-    public async Task<DriverDto> GetDriver(long userId)
-    {
-     var driver = await _context.Drivers
+     var user = await _context.Users
             .Where(d => d.Id == userId)
-            .Select(d => new DriverDto
+            .Select(d => new UserDto
             {
                 Id = d.Id,
                 Name = d.Name,
                 LicensePlate = d.LicensePlate,
                 OrderIds = d.Orders.Select(o => o.Id).ToList(),
-                Role = Role.Driver
+                Role = d.Role
             })
             .FirstOrDefaultAsync();
 
-        if (driver == null)
+        if (user == null)
         {
             throw new ArgumentException($"User with Id {userId} does not exist");
         }
         
-        return new DriverDto()
+        return new UserDto()
         {
-            Id = driver.Id,
-            Name = driver.Name,
-            LicensePlate = driver.LicensePlate,
-            OrderIds = driver.OrderIds,
-            Role = Role.Driver
+            Id = user.Id,
+            Name = user.Name,
+            LicensePlate = user.LicensePlate,
+            OrderIds = user.OrderIds,
+            Role = user.Role
         };
     }
-
-    public async Task<List<Admin>> GetAllAdmins()
+   
+    public async Task<List<UserDto>> GetAllUsers()
     {
-        var admins = await _context.Admins.ToListAsync();
-        return admins;
-    }
-
-    public async Task<List<DriverDto>> GetAllDrivers()
-    {
-        var drivers = await _context.Drivers.Include(driver => driver.Orders).ToListAsync();
+        var users = await _context.Users.Include(user => user.Orders).ToListAsync();
     
-        return drivers.Select(driver => new DriverDto()
+        return users.Select(user => new UserDto()
         {
-            Id = driver.Id,
-            Name = driver.Name,
-            LicensePlate = driver.LicensePlate, 
-            OrderIds = driver.Orders.Select(o => o.Id).ToList()
+            Id = user.Id,
+            Name = user.Name,
+            LicensePlate = user.LicensePlate, 
+            Password = user.Password,
+            OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }
-
-
-    public async Task UpdateAdmin(Admin admin, long id)
+    
+    public async Task UpdateUser(User user, long id)
     {
-        var existingUser = await GetAdmin(id);
+        var existingUser = await GetUser(id);
         if (existingUser == null)
         {
-            throw new ArgumentException($"User with Id {admin.Id} does not exist");
+            throw new ArgumentException($"User with Id {user.Id} does not exist");
         }
-
-        admin.Id = id;
+        
+        user.Id = id;
         _context.Entry(existingUser).State = EntityState.Detached;
-        _context.Entry(admin).State = EntityState.Modified;
+        _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateDriver(Driver driver, long id)
+    public async Task DeleteUser(long id)
     {
-        var existingUser = await GetAdmin(id);
-        if (existingUser == null)
-        {
-            throw new ArgumentException($"User with Id {driver.Id} does not exist");
-        }
-
-        driver.Id = id;
-        _context.Entry(existingUser).State = EntityState.Detached;
-        _context.Entry(driver).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-    }
-
-
-    public async Task DeleteAdmin(long id)
-    {
-        var admin = await GetAdmin(id);
-        if (admin == null)
+        var user = await GetUser(id);
+        if (user == null)
         {
             throw new ArgumentException($"User with Id {id} does not exist");
         }
 
-        _context.Admins.Remove(admin);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteDriver(long id)
-    {
-        var driver = await GetDriver(id);
-        if (driver == null)
+        var userEntity = new User
         {
-            throw new ArgumentException($"User with Id {id} does not exist");
-        }
-
-        var driverEntity = new Driver
-        {
-            Id = driver.Id,
-            Name = driver.Name,
-            LicensePlate = driver.LicensePlate,
-            Orders = driver.OrderIds?.Select(id => new Order { Id = id }).ToList()
+            Id = user.Id,
+            Name = user.Name,
+            LicensePlate = user.LicensePlate,
+            Orders = user.OrderIds?.Select(id => new Order { Id = id }).ToList()
         };
 
-        _context.Entry(driverEntity).State = EntityState.Deleted;
+        _context.Entry(userEntity).State = EntityState.Deleted;
         await _context.SaveChangesAsync();
     }
 }

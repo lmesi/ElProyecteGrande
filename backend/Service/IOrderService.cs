@@ -11,5 +11,5 @@ public interface IOrderService
     Task<List<OrderToShow>> GetAllOrders();
     Task<bool> UpdateOrder(long id, OrderDto orderDto);
     Task<bool> DeleteOrder(long id);
-    Task<List<OrderToShow>> GetOrdersByDriverId(long driverId);
+    Task<List<OrderToShow>> GetOrdersByUserId(long userId);
 }
