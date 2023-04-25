@@ -20,11 +20,10 @@ const UserForm = ({ onSave, user, isDisabled }) => {
     user["role"] = Number(userRole);
 
     onSave(user, id);
-    console.log(user);
   };
 
   const shouldDisableLicensePlate = useMemo(() => {
-    if ((user && user.role == "1") || userRole == "1") {
+    if (userRole == "1") {
       return true;
     }
     return false;
