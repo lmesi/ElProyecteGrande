@@ -14,8 +14,33 @@ function OrdersListPage() {
     }
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [data.length]);
 
+    const [open, setOpen] = useState(false);
+    const [toDelete, setToDelete] = useState("");
+    const handleClick = (id) => {
+        setOpen(true);
+        setToDelete(id);
+    };
+    const handleDialogClose = () => {
+        setOpen(false);
+        setToDelete('');
+    }
+    function fetchDelete() {
+        fetch(`/api/orders/${toDelete}`, {
+            method: 'DELETE'
+        })
+            .then(res =>
+                console.log("deleted " + res.status)
+            )
+            .catch(err => console.log(err));
+    }
+    const handleConfirm = () => {
+        fetchDelete();
+        setToDelete('');
+        setOpen(false);
+        setData([]);
+    };
     return (
         <div className="OrdersListPage">
             <Navbar />
@@ -43,10 +68,16 @@ function OrdersListPage() {
                             <td>{order.driverName}</td>
                             <td>{order.goodsName}</td>
                             <td><button onClick={() => { window.location.href = `/admin/orders/update/${order.id}`; }}>Edit</button></td>
-                            <td><button onClick={Delete}>Delete</button></td>
+                            <td><button onClick={e => handleClick(order.id)}>Delete</button></td>
                         </tr>))}
                     </tbody>
                 </table></div> : <h1>Loading...</h1>}
+            {open ? <Delete
+                isOpen={open}
+                content={`Are you sure you want to delete order ${toDelete}?`}
+                onConfirm={handleConfirm}
+                onClose={handleDialogClose}
+            /> : ""}
         </div>
     )
 }
