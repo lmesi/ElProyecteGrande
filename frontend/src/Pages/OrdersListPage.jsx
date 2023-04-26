@@ -42,7 +42,7 @@ function OrdersListPage() {
                             <td>{order.unloadingDate !== null ? order.unloadingDate.split("T")[0] : ""}</td>
                             <td>{order.driverName}</td>
                             <td>{order.goodsName}</td>
-                            <td><button onClick={OrderUpdatePage}>Edit</button></td>
+                            <td><button onClick={() => { window.location.href = `/admin/orders/update/${order.id}`; }}>Edit</button></td>
                             <td><button onClick={Delete}>Delete</button></td>
                         </tr>))}
                     </tbody>

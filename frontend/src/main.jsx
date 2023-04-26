@@ -25,6 +25,10 @@ const router = createBrowserRouter([
     path: "/admin/orders/addnew",
     element: <AddNewOrder />
   },
+  {
+    path: "/admin/orders/update/:id",
+    element: <OrdersUpdatePage />
+  }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
