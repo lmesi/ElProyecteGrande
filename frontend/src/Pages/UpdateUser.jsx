@@ -50,13 +50,17 @@ const UpdateUser = () => {
   if (user === null) return <h1>Loading...</h1>;
 
   return (
-    <div>
-      <h1>Update user</h1>
-      <UserForm
-        onSave={handleUpdateUser}
-        user={user}
-        isDisabled={updateLoading}
-      />
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="card card-custom">
+          <h1>Update user</h1>
+          <UserForm
+            onSave={handleUpdateUser}
+            user={user}
+            isDisabled={updateLoading}
+          />
+        </div>
+      </div>
     </div>
   );
 };

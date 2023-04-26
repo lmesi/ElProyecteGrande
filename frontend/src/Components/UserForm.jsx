@@ -31,44 +31,56 @@ const UserForm = ({ onSave, user, isDisabled }) => {
   }, [userRole]);
 
   return (
-    <form onSubmit={onSubmit}>
-      <div>
-        <label htmlFor="userName">Name</label>
-        <input
-          id="userName"
-          name="name"
-          defaultValue={user ? user.name : null}
-        />
+    <form className="userForm" onSubmit={onSubmit}>
+      <div className="form-group">
+        <label>
+          Name:
+          <input
+            className="form-control"
+            id="userName"
+            name="name"
+            defaultValue={user ? user.name : null}
+          />
+        </label>
       </div>
       {!user && (
-        <div>
-          <label htmlFor="password">Password</label>
-          <input id="password" name="password" />
+        <div className="form-group">
+          <label>
+            Password:
+            <input className="form-control" id="password" name="password" />
+          </label>
         </div>
       )}
-      <div>
-        <Dropdown
-          options={ROLES}
-          label={"Role"}
-          value={userRole}
-          setValue={setUserRole}
-        />
+      <div className="form-group">
+        <label htmlFor="licensePlate">
+          License plate:
+          <input
+            className="form-control"
+            id="licensePlate"
+            name="licensePlate"
+            disabled={shouldDisableLicensePlate}
+            defaultValue={user ? user?.licensePlate : null}
+          />
+        </label>
       </div>
-      <div>
-        <label htmlFor="licensePlate">License plate</label>
-        <input
-          id="licensePlate"
-          name="licensePlate"
-          disabled={shouldDisableLicensePlate}
-          defaultValue={user ? user?.licensePlate : null}
-        />
+      <Dropdown
+        options={ROLES}
+        label={""}
+        value={userRole}
+        setValue={setUserRole}
+      />
+      <div className="form-btn-container">
+        <button className="btn btn-primary" type="submit" disabled={isDisabled}>
+          Save
+        </button>
+        <button
+          className="btn btn-secondary"
+          type="reset"
+          onClick={() => navigate(-1)}
+        >
+          Cancel
+        </button>
       </div>
-      <button type="submit" disabled={isDisabled}>
-        Save
-      </button>
-      <button type="reset" onClick={() => navigate(-1)}>
-        Cancel
-      </button>
     </form>
   );
 };

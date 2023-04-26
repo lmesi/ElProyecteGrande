@@ -32,9 +32,13 @@ const AddUser = () => {
   };
 
   return (
-    <div>
-      <h1>Add new user</h1>
-      <UserForm onSave={handleAddUser} isDisabled={addLoading} />
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="card card-custom">
+          <h1>Add New User</h1>
+          <UserForm onSave={handleAddUser} isDisabled={addLoading} />
+        </div>
+      </div>
     </div>
   );
 };

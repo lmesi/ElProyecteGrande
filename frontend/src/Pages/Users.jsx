@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Users.css";
+//import "../CompaniesPage.css";
 import Dropdown from "../Components/Dropdown";
 
 const fetchUsers = () => {
@@ -29,8 +30,8 @@ const Users = () => {
   const [orderDirection, setOrderDirection] = useState("ASC");
   const ROLES = [
     { label: "All", value: "" },
-    { label: "admin", value: 1 },
-    { label: "driver", value: 0 },
+    { label: "Admin", value: 1 },
+    { label: "Driver", value: 0 },
   ];
 
   useEffect(() => {
@@ -70,64 +71,76 @@ const Users = () => {
 
   return (
     <div>
-      <h1>Users</h1>
-      <label>Search for user name: </label>
-      <input
-        type="text"
-        value={searchName}
-        onChange={(event) => setSearchName(event.target.value)}
-      />
-      <Dropdown
-        label={"Filter by role: "}
-        options={ROLES}
-        value={searchRole}
-        setValue={setSearchRole}
-      />
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>
-              Name <button onClick={handleOrderBy}>{orderDirection}</button>
-            </th>
-            <th>Role</th>
-            <th>License Plate</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {users
-            .filter((user) =>
-              user.name.toLowerCase().includes(searchName.toLowerCase())
-            )
-            .filter((user) => {
-              if (searchRole === "") return true;
-              return searchRole == user.role;
-            })
-            .sort((a, b) => sortByName(a.name, b.name, orderDirection))
-            .map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.role === 1 ? "Admin" : "Driver"}</td>
-                <td>{user.licensePlate}</td>
-                <td>
-                  <Link to={`/admin/users/update/${user.id}`}>
-                    <button>Edit</button>
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setShowModal(true);
-                      setUserToDelete(user);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <h1 className="titles">Users</h1>
+      <div className="row justify-content-center">
+        <div className="searchBar drop-container">
+          <label className="searchBar-flex-item">Search for user name: </label>
+          <input
+            className="searchBar-flex-item searchField"
+            type="text"
+            value={searchName}
+            onChange={(event) => setSearchName(event.target.value)}
+          />
+          <Dropdown
+            label={"Filter by role: "}
+            options={ROLES}
+            value={searchRole}
+            setValue={setSearchRole}
+          />
+        </div>
+      </div>
+      <div className="row justify-content-center">
+        <table className="table table-striped table-dark table-hover">
+          <thead className="tableHead">
+            <tr>
+              <th>
+                <button className="headButton" onClick={handleOrderBy}>
+                  Name {orderDirection === "ASC" ? "▲" : "▼"}
+                </button>
+              </th>
+              <th>Role</th>
+              <th>License Plate</th>
+              <th />
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {users
+              .filter((user) =>
+                user.name.toLowerCase().includes(searchName.toLowerCase())
+              )
+              .filter((user) => {
+                if (searchRole === "") return true;
+                return searchRole == user.role;
+              })
+              .sort((a, b) => sortByName(a.name, b.name, orderDirection))
+              .map((user) => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.role === 1 ? "Admin" : "Driver"}</td>
+                  <td>{user.licensePlate}</td>
+                  <td>
+                    <Link to={`/admin/users/update/${user.id}`}>
+                      <button className="editButton">Edit</button>
+                    </Link>
+                  </td>
+                  <td>
+                    <button
+                      className="deleteButton"
+                      onClick={() => {
+                        setShowModal(true);
+                        setUserToDelete(user);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+
       {showModal && (
         <Modal
           close={setShowModal}
@@ -143,12 +156,14 @@ const Users = () => {
 const Modal = ({ close, onDelete, id, name }) => {
   return (
     <div className="blackout">
-      <div className="modal">
-        <p>
-          Ara you sure you want to delete {name} user with id {id}?
-        </p>
-        <button onClick={() => onDelete(id)}>Delete</button>
-        <button onClick={() => close(false)}>Cancel</button>
+      <div className="popup">
+        <h3>Would You like to delete the company named "{name}"?</h3>
+        <button className="deleteButtonForPopUp" onClick={() => onDelete(id)}>
+          Delete
+        </button>
+        <button className="cancelButtonForPopUp" onClick={() => close(false)}>
+          Cancel
+        </button>
       </div>
     </div>
   );

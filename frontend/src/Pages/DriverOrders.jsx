@@ -46,42 +46,46 @@ const DriverOrders = () => {
 
   return (
     <div>
-      <h1>My orders</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Order Id</th>
-            <th>Company name</th>
-            <th>Loading address</th>
-            <th>Unloading address</th>
-            <th>Unloading date</th>
-            <th>Goods</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.companyName}</td>
-              <td>{order.loadingAddress}</td>
-              <td>{order.unloadingAddress}</td>
-              <td>{order.unloadingDate?.split("T")[0] ?? "uncompleted"}</td>
-              <td>{order.goodsName}</td>
-              <td>
-                <button
-                  onClick={() => {
-                    setShowModal(true);
-                    setOrderToShow(order);
-                  }}
-                >
-                  Add unloading date
-                </button>
-              </td>
+      <h1 className="titles">My orders</h1>
+      <div className="row justify-content-center">
+        <table className="table table-striped table-dark table-hover align-middle">
+          <thead className="tableHead">
+            <tr>
+              <th>Order Id</th>
+              <th>Company name</th>
+              <th>Loading address</th>
+              <th>Unloading address</th>
+              <th>Unloading date</th>
+              <th>Goods</th>
+              <th />
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.companyName}</td>
+                <td>{order.loadingAddress}</td>
+                <td>{order.unloadingAddress}</td>
+                <td>{order.unloadingDate?.split("T")[0] ?? "uncompleted"}</td>
+                <td>{order.goodsName}</td>
+                <td>
+                  <button
+                    id="loadingDateBtn"
+                    className="editButton"
+                    onClick={() => {
+                      setShowModal(true);
+                      setOrderToShow(order);
+                    }}
+                  >
+                    Add unloading date
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {showModal && (
         <AddDateModal
           isOpen={setShowModal}
@@ -99,15 +103,29 @@ const AddDateModal = ({ isOpen, onUpdate, orderId, defaultDate }) => {
 
   return (
     <div className="blackout">
-      <div className="modal">
-        <h2>Add unloading date</h2>
+      <div className="popup date-modal-container">
+        <h3>Add unloading date</h3>
         <input
+          className="form-control"
+          id="dateInput"
           type="date"
           value={date}
           onChange={(event) => setDate(event.target.value)}
         />
-        <button onClick={() => onUpdate(orderId, date)}>Save</button>
-        <button onClick={() => isOpen(false)}>Cancel</button>
+        <div>
+          <button
+            className="deleteButtonForPopUp"
+            onClick={() => onUpdate(orderId, date)}
+          >
+            Save
+          </button>
+          <button
+            className="cancelButtonForPopUp"
+            onClick={() => isOpen(false)}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
