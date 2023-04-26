@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../Components/Navbar"
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import OrderForm from "../Components/FormForOrderAddOrUpdate";
@@ -8,14 +7,13 @@ export default function OrdersUpdatePage() {
     const id = useParams().id
     console.log(id)
     const [data, setData] = useState([]);
-    // const [data, setOrder] = useState("");
     const [message, setMessage] = useState("");
     const [company, setCompany] = useState("");
     const [loadingPlace, setLoadingPlace] = useState("");
     const [unloadingPlace, setUnloadingPlace] = useState("");
     const [driver, setDriver] = useState("");
     const [goods, setGoods] = useState("");
-
+    const [show, setShow] = useState(false);
     function fetchData() {
         fetch(`/api/Orders/${id}`)
             .then((response) => response.json())
@@ -25,10 +23,6 @@ export default function OrdersUpdatePage() {
         fetchData();
         console.log(data);
     }, [data.length]);
-    // useEffect(() => {
-    //     setOrder(data)
-    //     console.log(data)
-    // }, [data.id]);
 
     const [companyData, setCompanyData] = useState([]);
     const [driverData, setDriverData] = useState([]);
@@ -53,7 +47,7 @@ export default function OrdersUpdatePage() {
         fetchCompanies();
         fetchDrivers();
         fetchGoods();
-    }, []);
+    }, [goodsData.length]);
     let handleSubmit = async (e) => {
         e.preventDefault();
         console.log(data)
@@ -70,7 +64,7 @@ export default function OrdersUpdatePage() {
             goodsId: goods === data.goods ? "" : goods,
         }
         let dataToFetch = {};
-        let filteredDatas = Object.entries(datas).map(pair => pair[1] !== "" ? dataToFetch[pair[0]] = pair[1] : '')
+        Object.entries(datas).map(pair => pair[1] !== "" ? dataToFetch[pair[0]] = pair[1] : '')
         console.log(dataToFetch)
         try {
             let res = await fetch(`/api/Orders/${id}`, {
@@ -81,7 +75,6 @@ export default function OrdersUpdatePage() {
                 },
                 body: JSON.stringify(dataToFetch),
             });
-            // let resJson = await res.json();
             if (res.status === 200) {
                 setCompany("");
                 setLoadingPlace("");
@@ -96,10 +89,53 @@ export default function OrdersUpdatePage() {
             console.log(err);
         }
     };
+    let handleAddGoodsSubmit = async (e) => {
+        e.preventDefault();
 
+        try {
+            let res = await fetch("/api/Goods", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: goods
+                }),
+            });
+            if (res.status === 200) {
+                setGoods("");
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        setShow(false);
+        setGoodsData([]);
+    };
+    let deleteGoods = async () => {
+        try {
+            let res = await fetch(`/api/Goods/${goods}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: goods
+                }),
+            });
+            if (res.status === 200) {
+
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        setGoodsData([]);
+        setShow(false);
+    };
+    const setGoodsForDelete = (toDelete) => {
+        setGoods(toDelete);
+    }
     return (
         <div>
-            <Navbar />
             <h1>Edit data ({id})</h1>
             {(companyData.length > 0 && driverData.length > 0 && goodsData.length > 0 && data.id !== undefined) ?
                 <form className="form" onSubmit={handleSubmit}>
@@ -132,13 +168,33 @@ export default function OrdersUpdatePage() {
                             <option value="" disabled selected hidden>select goods</option>
                             {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name}</option>))}
                         </select>
-                        <button >Add new goods</button>
+                        <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>
                     </div>
                     <input type="submit" value="Submit" />
 
                 </form>
                 : <h1>Loading...</h1>}
             {message === "" ? "" : <p>{message}</p>}
+            {show ?
+                <div>
+                    <form className="form" onSubmit={handleAddGoodsSubmit}>
+                        <div className="formElement">
+                            <label>
+                                Add new goods:
+                                <input type="text" value={goods} onChange={(e) => setGoods(e.target.value)} />
+                            </label>
+                            <input type="submit" value="Submit" />
+                            <label>
+                                Delete this record of goods:
+                                <select value={goods} name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
+                                    <option value="" disabled selected hidden>select goods</option>
+                                    {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
+                                </select>
+                                <button onClick={(e) => { e.preventDefault(); deleteGoods(); }}>X</button>
+                            </label>
+                        </div>
+                    </form>
+                </div> : ""}
         </div>
     );
 }
