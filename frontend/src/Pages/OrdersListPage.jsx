@@ -1,16 +1,16 @@
 import React from "react";
-import Navbar from "../Components/Navbar"
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import OrderUpdatePage from "./OrderUpdatePage"
 import Delete from "../Components/Delete";
+import Filter from "../Components/Filter";
 
 function OrdersListPage() {
     const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [filterOptions, setFilterOptions] = useState({ 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" });
     function fetchData() {
         fetch("/api/Orders")
             .then((response) => response.json())
-            .then((json) => setData(json)).catch(e => console.log(e.message));;
+            .then((json) => { setData(json); setFilteredData(json) }).catch(e => console.log(e.message));;
     }
     useEffect(() => {
         fetchData();
@@ -41,25 +41,55 @@ function OrdersListPage() {
         setOpen(false);
         setData([]);
     };
+    const handleFiltering = (e, columnNumber) => {
+        setFilterOptions((prevState) => ({ ...prevState, [columnNumber]: e.target.value }));
+    };
+
+    useEffect(() => {
+        let filtered = data;
+        if (filterOptions[1] !== "") {
+            filtered = filtered.filter(order => order.companyName === filterOptions[1]);
+        }
+        if (filterOptions[2] !== "") {
+            filtered = filtered.filter(order => order.loadingAddress === filterOptions[2]);
+        }
+        if (filterOptions[3] !== "") {
+            filtered = filtered.filter(order => order.unloadingAddress === filterOptions[3]);
+        }
+        if (filterOptions[4] !== "") {
+            if (filterOptions[4] === "Finished") {
+                filtered = filtered.filter(order => order.unloadingDate !== null);
+            }
+            if (filterOptions[4] === "Not finished") {
+                filtered = filtered.filter(order => order.unloadingDate === null);
+            }
+        }
+        if (filterOptions[5] !== "") {
+            filtered = filtered.filter(order => order.driverName === filterOptions[5]);
+        }
+        if (filterOptions[6] !== "") {
+            filtered = filtered.filter(order => order.goodsName === filterOptions[6]);
+        }
+        setFilteredData(filtered);
+    }, [data, filterOptions]);
     return (
         <div className="OrdersListPage">
-            <Navbar />
             <h1>Orders</h1>
             {data.length > 0 ? <div>
                 <table className="listingTable">
                     <thead>
                         <tr>
                             <th>Order Id</th>
-                            <th>Company name</th>
-                            <th>Loading place</th>
-                            <th>Unloading place</th>
-                            <th>Unloading time</th>
-                            <th>Driver</th>
-                            <th>Goods</th>
+                            <th>Company name <div><Filter whatToFilter={data.map(order => order.companyName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 1)} /></div></th>
+                            <th>Loading place <div><Filter whatToFilter={data.map(order => order.loadingAddress).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 2)} /></div></th>
+                            <th>Unloading place<div><Filter whatToFilter={data.map(order => order.unloadingAddress).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 3)} /></div></th>
+                            <th>Unloading time<div><Filter whatToFilter={["Finished", "Not finished"]} onFilterSelect={e => handleFiltering(e, 4)} /></div></th>
+                            <th>Driver<div><Filter whatToFilter={data.map(order => order.driverName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 5)} /></div></th>
+                            <th>Goods<div><Filter whatToFilter={data.map(order => order.goodsName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 6)} /></div></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map(order => (<tr key={order.id}>
+                        {filteredData.map(order => (<tr key={order.id}>
                             <td>{order.id}</td>
                             <td>{order.companyName}</td>
                             <td>{order.loadingAddress}</td>
