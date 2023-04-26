@@ -1,4 +1,6 @@
 import { useState } from "react";
+import '../Form.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function AddNewCompany() {
 
@@ -36,19 +38,28 @@ export default function AddNewCompany() {
     }
 
     return (
-        <>
-            <h1>Add New Company:</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Company name:
-                    <input type="text" id="name" name="name" value={companyName} onChange={handleNameChange} />
-                </label>
-                <label>
-                    Company Address:
-                    <input type="text" id="address" name="address" value={companyAddress} onChange={handleAddressChange} />
-                </label>
-                <input type="submit" value="Add Company" />
-            </form>
-        </>
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="card card-custom">
+                    <h1>Add New Company:</h1>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label>
+                                Company Name:
+                                <input type="text" id="name" className="form-control" name="name" value={companyName} onChange={handleNameChange} />
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <label>
+                                Company Address:
+                                <input type="text" id="address" className="form-control" name="address" value={companyAddress} onChange={handleAddressChange} />
+                            </label>
+                        </div>
+                        <input type="submit" value="Add Company"
+                            className={companyName && companyAddress != "" ? "btn btn-primary" : "btn btn-primary disabled"} />
+                    </form>
+                </div>
+            </div>
+        </div >
     )
 }

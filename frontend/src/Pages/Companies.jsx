@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CompanyPopUp from './CompanyPopUp';
 import { Link } from 'react-router-dom';
-import '../App.css'
+import '../CompaniesPage.css';
 import SearchBarCompanies from "./SearchBarCompanies";
 
 export default function Companies() {
@@ -55,20 +55,22 @@ export default function Companies() {
             {companies.length < 1 ? <h3>Loading...</h3> :
                 <div>
                     <SearchBarCompanies companies={companies} setCompaniesToShow={setCompaniesToShow} />
-                    <div>
-                        <table>
-                            <thead>
+                    <div class="row justify-content-center">
+                        <table className="table table-striped table-dark table-hover">
+                            <thead className="tableHead">
                                 <tr>
                                     <th>
-                                        <button type="button" onClick={handleSortClickByName}>
+                                        <button type="button" className="headButton" onClick={handleSortClickByName}>
                                             Name {sortDirectionByName === 'asc' ? '▲' : '▼'}
                                         </button>
                                     </th>
                                     <th>
-                                        <button type="button" onClick={handleSortClickByAddress}>
+                                        <button type="button" className="headButton" onClick={handleSortClickByAddress}>
                                             Address {sortDirectionByAddress === 'asc' ? '▲' : '▼'}
                                         </button>
                                     </th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,11 +81,11 @@ export default function Companies() {
                                             <td>{company.address}</td>
                                             <td>
                                                 <Link to={`/admin/companies/update/${company.id}`}>
-                                                    <button>Edit</button>
+                                                    <button className="editButton">Edit</button>
                                                 </Link>
                                             </td>
                                             <td>
-                                                <button onClick={() => handlePopUp(company)}>Delete</button>
+                                                <button className="deleteButton" onClick={() => handlePopUp(company)}>Delete</button>
                                             </td>
                                         </tr>
                                     )

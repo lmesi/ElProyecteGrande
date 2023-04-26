@@ -1,0 +1,27 @@
+.form-control {
+    margin-bottom: 20px;
+}
+
+.card-custom {
+    background-color: #f39200 !important;
+    justify-self: center !important;
+}
+
+.card-custom {
+    width: 50% !important;
+}
+
+.btn {
+    margin-bottom: 20px;
+    background-color: #242424 !important;
+    border: white !important;
+}
+
+.container {
+    text-align: center;
+}
+
+.card {
+    margin-top: 15% !important;
+    padding: 5%;
+}

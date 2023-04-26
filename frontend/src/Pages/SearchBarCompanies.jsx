@@ -20,20 +20,22 @@ export default function SearchBarCompanies({ companies, setCompaniesToShow }) {
     }
 
     return (
-        <div>
-            <label>Search:
-                <input onChange={handleInputChange} type="text" />
-            </label>
-            <label>
-                By Name:
-                <input type="radio" value="name" checked={option === "name"}
-                    onChange={handleOptionChange} />
-            </label>
-            <label>
-                By Address:
-                <input type="radio" value="address" checked={option === "address"}
-                    onChange={handleOptionChange} />
-            </label>
+        <div className="row justify-content-center">
+            <div className="searchBar">
+                <label className="searchBar-flex-item">Search:
+                    <input onChange={handleInputChange} type="text" className="searchBar-flex-item searchField" />
+                </label>
+                <label className="optionLabel searchBar-flex-item">
+                    By Name:
+                    <input type="radio" value="name" className="searchBar-flex-item" checked={option === "name"}
+                        onChange={handleOptionChange} />
+                </label>
+                <label className="optionLabel searchBar-flex-item">
+                    By Address:
+                    <input type="radio" value="address" className="searchBar-flex-item" checked={option === "address"}
+                        onChange={handleOptionChange} />
+                </label>
+            </div>
         </div>
     )
 }

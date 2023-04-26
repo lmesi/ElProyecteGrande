@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import '../Form.css';
 
 export default function UpdateCompany() {
 
@@ -60,21 +61,30 @@ export default function UpdateCompany() {
     }
 
     return (
-        <>
-            <h1>Edit Company:</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Company name:
-                    <input type="text" id="name" placeholder={Object.keys(company).length === 0 ? ""
-                        : company.name} name="name" value={companyName} onChange={handleNameChange} />
-                </label>
-                <label>
-                    Company Address:
-                    <input type="text" id="address" placeholder={Object.keys(company).length === 0 ? ""
-                        : company.address} name="address" value={companyAddress} onChange={handleAddressChange} />
-                </label>
-                <input type="submit" value="Edit Company" />
-            </form>
-        </>
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="card card-custom">
+                    <h1>Edit {Object.keys(company).length === 0 ? "..."
+                        : company.name}:</h1>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label>
+                                Company Name:
+                                <input type="text" id="name" placeholder={Object.keys(company).length === 0 ? ""
+                                    : company.name} name="name" value={companyName} onChange={handleNameChange} className="form-control" />
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <label>
+                                Company Address:
+                                <input type="text" id="address" placeholder={Object.keys(company).length === 0 ? ""
+                                    : company.address} name="address" value={companyAddress} onChange={handleAddressChange} className="form-control" />
+                            </label>
+                        </div>
+                        <input type="submit" value="Edit Company" className="btn btn-primary" />
+                    </form>
+                </div>
+            </div>
+        </div>
     )
 }

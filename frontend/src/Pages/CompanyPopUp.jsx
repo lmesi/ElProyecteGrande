@@ -1,5 +1,6 @@
 import React from "react";
 import '../App.css'
+import '../CompaniesPage.css';
 
 export default function CompanyPopUp({ setShowPopup, companyToDelete, setCompanies, setCompaniesToShow }) {
 
@@ -28,8 +29,8 @@ export default function CompanyPopUp({ setShowPopup, companyToDelete, setCompani
     return (
         <div className="popup">
             <h3>Would You like to delete the company named "{companyToDelete.name}"?</h3>
-            <button onClick={handleDelete}>Delete</button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button className="deleteButtonForPopUp" onClick={handleDelete}>Delete</button>
+            <button className="cancelButtonForPopUp" onClick={handleCancel}>Cancel</button>
         </div>
     )
 }
