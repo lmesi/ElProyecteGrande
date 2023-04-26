@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../Components/UserForm";
 
 const fetchUsers = (id) => {
-  return fetch(`/api/Users/admin/${id}`).then((res) => res.json());
+  return fetch(`/api/Users/${id}`).then((res) => res.json());
 };
 
 const update = (user, id) => {
-  return fetch(`/api/Users/admin/${id}`, {
+  return fetch(`/api/Users/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -24,10 +24,13 @@ const UpdateUser = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUsers(id).then((admin) => {
-      setUser(admin);
-      console.log(admin);
-    });
+    fetchUsers(id)
+      .then((admin) => {
+        setUser(admin);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   const handleUpdateUser = (user, id) => {

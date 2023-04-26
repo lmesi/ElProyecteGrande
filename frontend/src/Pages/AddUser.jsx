@@ -4,7 +4,7 @@ import UserForm from "../Components/UserForm";
 import { useNavigate } from "react-router-dom";
 
 const addUser = (user) => {
-  return fetch("/api/Users/admin", {
+  return fetch("/api/Users", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

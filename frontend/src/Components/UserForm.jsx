@@ -3,11 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
 
 const UserForm = ({ onSave, user, isDisabled }) => {
-  const [roles, setRoles] = useState([
+  const ROLES = [
     { label: "Select a role", value: "" },
     { label: "admin", value: 1 },
     { label: "driver", value: 0 },
-  ]);
+  ];
 
   const [userRole, setUserRole] = useState(user?.role);
   const { id } = useParams();
@@ -18,7 +18,8 @@ const UserForm = ({ onSave, user, isDisabled }) => {
     const formData = new FormData(event.target);
     const user = Object.fromEntries(formData.entries());
     user["role"] = Number(userRole);
-
+    if (!user?.licensePlate) user["licensePlate"] = "";
+    if (!user?.password) user["password"] = "";
     onSave(user, id);
   };
 
@@ -39,9 +40,15 @@ const UserForm = ({ onSave, user, isDisabled }) => {
           defaultValue={user ? user.name : null}
         />
       </div>
+      {!user && (
+        <div>
+          <label htmlFor="password">Password</label>
+          <input id="password" name="password" />
+        </div>
+      )}
       <div>
         <Dropdown
-          options={roles}
+          options={ROLES}
           label={"Role"}
           value={userRole}
           setValue={setUserRole}

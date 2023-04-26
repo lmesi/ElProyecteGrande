@@ -3,16 +3,12 @@ import { Link } from "react-router-dom";
 import "./Users.css";
 import Dropdown from "../Components/Dropdown";
 
-const fetchAdmins = () => {
-  return fetch("/api/Users/admin").then((res) => res.json());
-};
-
-const fetchDrivers = () => {
-  return fetch("/api/Users/driver").then((res) => res.json());
+const fetchUsers = () => {
+  return fetch("/api/Users").then((res) => res.json());
 };
 
 const deleteUser = (id) => {
-  return fetch(`/api/Users/admin/${id}`, {
+  return fetch(`/api/Users/${id}`, {
     method: "DELETE",
   });
 };
@@ -26,32 +22,25 @@ const sortByName = (a, b, order) => {
 
 const Users = () => {
   const [users, setUsers] = useState(null);
-  const [drivers, setDrivers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState();
   const [searchName, setSearchName] = useState("");
   const [searchRole, setSearchRole] = useState("");
   const [orderDirection, setOrderDirection] = useState("ASC");
-  const [roles, setRoles] = useState([
+  const ROLES = [
     { label: "All", value: "" },
     { label: "admin", value: 1 },
     { label: "driver", value: 0 },
-  ]);
+  ];
 
   useEffect(() => {
-    fetchAdmins()
-      .then((admins) => {
-        setUsers(admins);
+    fetchUsers()
+      .then((data) => {
+        setUsers(data);
       })
       .catch((error) => {
         console.error(error);
       });
-
-    /* fetchDrivers().then((drivers) => {
-      const data = [...users, ...drivers];
-      setUsers(data);
-      console.log(users);
-    }); */
   }, []);
 
   const handleDeleteUser = (id) => {
@@ -60,7 +49,7 @@ const Users = () => {
         console.log(error);
       })
       .finally(() => {
-        fetchAdmins()
+        fetchUsers()
           .then((data) => {
             setUsers(data);
           })
@@ -90,7 +79,7 @@ const Users = () => {
       />
       <Dropdown
         label={"Filter by role: "}
-        options={roles}
+        options={ROLES}
         value={searchRole}
         setValue={setSearchRole}
       />
@@ -121,7 +110,7 @@ const Users = () => {
                 <td>{user.id}</td>
                 <td>{user.name}</td>
                 <td>{user.role === 1 ? "Admin" : "Driver"}</td>
-                <td>{user?.plate}</td>
+                <td>{user.licensePlate}</td>
                 <td>
                   <Link to={`/admin/users/update/${user.id}`}>
                     <button>Edit</button>

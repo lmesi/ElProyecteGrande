@@ -20,9 +20,13 @@ const DriverOrders = () => {
   const [orderToShow, setOrderToShow] = useState();
 
   useEffect(() => {
-    fetchDriverOrders(id).then((data) => {
-      setOrders(data);
-    });
+    fetchDriverOrders(id)
+      .then((data) => {
+        setOrders(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   const handleAddDate = (orderId, date) => {
