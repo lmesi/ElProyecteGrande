@@ -15,6 +15,6 @@ public class User
     public Role Role { get; set; }
 
     public string LicensePlate { get; set; }
-    
-    public List<Order> Orders { get; set; }
+
+    public List<Order> Orders { get; set; } = new();
 }
