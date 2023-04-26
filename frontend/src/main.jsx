@@ -12,22 +12,28 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path: "/admin",
-    element: <AdminPage />
-  },
-  {
-    path: "/admin/orders",
-    element: <OrdersListPage />
-  },
-  {
-    path: "/admin/orders/addnew",
-    element: <AddNewOrder />
-  },
-  {
-    path: "/admin/orders/update/:id",
-    element: <OrdersUpdatePage />
+    children:
+      [
+        {
+          path: "/admin",
+          element: <AdminPage />,
+          children:
+            [
+              {
+                path: "/admin/orders",
+                element: <OrdersListPage />
+              },
+              {
+                path: "/admin/orders/addnew",
+                element: <AddNewOrder />
+              },
+              {
+                path: "/admin/orders/update/:id",
+                element: <OrdersUpdatePage />
+              }
+            ]
+        },
+      ]
   }
 ])
 
