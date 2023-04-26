@@ -17,24 +17,6 @@ namespace Backend.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
 
-            modelBuilder.Entity("Backend.Model.Entities.Admin", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins");
-                });
-
             modelBuilder.Entity("Backend.Model.Entities.Company", b =>
                 {
                     b.Property<long>("Id")
@@ -54,7 +36,7 @@ namespace Backend.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Backend.Model.Entities.Driver", b =>
+            modelBuilder.Entity("Backend.Model.Entities.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,7 +55,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drivers");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Backend.Model.Entities.Goods", b =>
@@ -100,7 +82,7 @@ namespace Backend.Migrations
                     b.Property<long>("CompanyId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("DriverId")
+                    b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("GoodsId")
@@ -121,7 +103,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("GoodsId");
 
@@ -136,9 +118,9 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Model.Entities.Driver", "Driver")
+                    b.HasOne("Backend.Model.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("DriverId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -150,7 +132,7 @@ namespace Backend.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("Driver");
+                    b.Navigation("User");
 
                     b.Navigation("Goods");
                 });
@@ -160,7 +142,7 @@ namespace Backend.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Backend.Model.Entities.Driver", b =>
+            modelBuilder.Entity("Backend.Model.Entities.User", b =>
                 {
                     b.Navigation("Orders");
                 });

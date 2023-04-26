@@ -2,6 +2,7 @@ using Backend.Model.Entities;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Model.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers
 {
@@ -16,12 +17,12 @@ namespace Backend.Controllers
             _userService = userService;
         }
 
-        [HttpPost("admin")]
-        public async Task<IActionResult> AddAdmin([FromBody] Admin admin)
+        [HttpPost]
+        public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
         {
             try
             {
-                await _userService.AddAdmin(admin);
+                await _userService.AddUser(userDto);
                 return Ok();
             }
             catch (Exception ex)
@@ -30,12 +31,68 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpPost("driver")]
-        public async Task<IActionResult> AddDriver([FromBody] DriverDto driverDto)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(long id)
         {
             try
             {
-                await _userService.AddDriver(driverDto);
+                var user = await _userService.GetUser(id);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsers();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("/admin")]
+        public async Task<IActionResult> GetAllAdmin()
+        {
+            try
+            {
+                var users = await _userService.GetAllAdmin();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("/driver")]
+        public async Task<IActionResult> GetAllDriver()
+        {
+            try
+            {
+                var users = await _userService.GetAllDriver();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser([FromBody] User user, long id)
+        {
+            try
+            {
+                await _userService.UpdateUser(user, id);
                 return Ok();
             }
             catch (Exception ex)
@@ -44,110 +101,12 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpGet("admin/{id}")]
-        public async Task<IActionResult> GetAdmin(long id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(long id)
         {
             try
             {
-                var admin = await _userService.GetAdmin(id);
-                return Ok(admin);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("driver/{id}")]
-        public async Task<IActionResult> GetDriver(long id)
-        {
-            try
-            {
-                var driver = await _userService.GetDriver(id);
-                return Ok(driver);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("admin")]
-        public async Task<IActionResult> GetAllAdmins()
-        {
-            try
-            {
-                var admins = await _userService.GetAllAdmins();
-                return Ok(admins);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("driver")]
-        public async Task<IActionResult> GetAllDrivers()
-        {
-            try
-            {
-                var drivers = await _userService.GetAllDrivers();
-                return Ok(drivers);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("admin/{id}")]
-        public async Task<IActionResult> UpdateAdmin([FromBody] Admin admin, long id)
-        {
-            try
-            {
-                await _userService.UpdateAdmin(admin, id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("driver/{id}")]
-        public async Task<IActionResult> UpdateDriver([FromBody] Driver driver, long id)
-        {
-            try
-            {
-                await _userService.UpdateDriver(driver, id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("admin/{id}")]
-        public async Task<IActionResult> DeleteAdmin(long id)
-        {
-            try
-            {
-                await _userService.DeleteAdmin(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("driver/{id}")]
-        public async Task<IActionResult> DeleteDriver(long id)
-        {
-            try
-            {
-                await _userService.DeleteDriver(id);
+                await _userService.DeleteUser(id);
                 return Ok();
             }
             catch (Exception ex)

@@ -12,6 +12,6 @@ public class Order
     public string LoadingAddress { get; set; }
     public string UnloadingAddress { get; set; }
     public DateTime? UnloadingDate { get; set; } = null;
-    public Driver Driver { get; set; }
+    public User User { get; set; }
     public Goods Goods { get; set; }
 }

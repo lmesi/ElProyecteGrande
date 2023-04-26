@@ -14,8 +14,7 @@ public class SpeedyContext : DbContext
         optionsBuilder.UseSqlite(@"DataSource=db/database.db;");
     }
 
-    public DbSet<Admin> Admins { get; set; }
-    public DbSet<Driver> Drivers { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Goods> Goods { get; set; }

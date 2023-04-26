@@ -12,6 +12,6 @@ public class OrderDto
     public string? LoadingAddress { get; set; }
     public string? UnloadingAddress { get; set; }
     public DateTime? UnloadingDate { get; set; } = null;
-    public long DriverId { get; set; }
+    public long UserId { get; set; }
     public long GoodsId { get; set; }
 }

@@ -10,17 +10,20 @@ namespace Backend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Admins",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    LicensePlate = table.Column<string>(type: "TEXT", nullable: false)
+
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admins", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,21 +39,7 @@ namespace Backend.Migrations
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Drivers",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    LicensePlate = table.Column<string>(type: "TEXT", nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Drivers", x => x.Id);
-                });
+          
 
             migrationBuilder.CreateTable(
                 name: "Goods",
@@ -75,7 +64,7 @@ namespace Backend.Migrations
                     LoadingAddress = table.Column<string>(type: "TEXT", nullable: false),
                     UnloadingAddress = table.Column<string>(type: "TEXT", nullable: false),
                     UnloadingDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DriverId = table.Column<long>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
                     GoodsId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -88,9 +77,9 @@ namespace Backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_Drivers_DriverId",
-                        column: x => x.DriverId,
-                        principalTable: "Drivers",
+                        name: "FK_Orders_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -107,9 +96,9 @@ namespace Backend.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_DriverId",
+                name: "IX_Orders_UserId",
                 table: "Orders",
-                column: "DriverId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_GoodsId",
@@ -117,13 +106,13 @@ namespace Backend.Migrations
                 column: "GoodsId");
             
             //admins
-            migrationBuilder.Sql("INSERT INTO Admins (Name, Role) VALUES ('Admin 1','1')");
-            migrationBuilder.Sql("INSERT INTO Admins (Name, Role) VALUES ('Admin 2', '1')");
-            migrationBuilder.Sql("INSERT INTO Admins (Name, Role) VALUES ('Admin 3', '1')");
+            migrationBuilder.Sql("INSERT INTO Users (LicensePlate, Name, Role, Password) VALUES ('','Admin 1','1','123')");
+            migrationBuilder.Sql("INSERT INTO Users (LicensePlate, Name, Role, Password) VALUES ('','Admin 2','1','abc')");
+            migrationBuilder.Sql("INSERT INTO Users (LicensePlate, Name, Role, Password) VALUES ('','Admin 3','1','asd')");
             
             //drivers
-            migrationBuilder.Sql("INSERT INTO Drivers (LicensePlate, Role, Name) VALUES ('AABB123','0','Driver1')");
-            migrationBuilder.Sql("INSERT INTO Drivers (LicensePlate, Role, Name) VALUES ('AABB124','0','Driver2')");
+            migrationBuilder.Sql("INSERT INTO Users (LicensePlate, Role, Name, Password) VALUES ('AABB123','0','User1','123')");
+            migrationBuilder.Sql("INSERT INTO Users (LicensePlate, Role, Name, Password) VALUES ('AABB124','0','User2','abc')");
 
             //companies
             migrationBuilder.Sql("INSERT INTO Companies (Name, Address) VALUES ('Company 1','Oslo(N)')");
@@ -151,7 +140,7 @@ namespace Backend.Migrations
                 name: "Companies");
 
             migrationBuilder.DropTable(
-                name: "Drivers");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Goods");

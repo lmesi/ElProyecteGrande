@@ -23,7 +23,7 @@ public class OrderService : IOrderService
             Order order = new Order()
             {
                 Company = await _speedyContext.Companies.FirstAsync(c => c.Id == orderDto.CompanyId),
-                Driver = await _speedyContext.Drivers.FirstAsync(d => d.Id == orderDto.DriverId),
+                User = await _speedyContext.Users.FirstAsync(d => d.Id == orderDto.UserId),
                 Id = orderDto.Id,
                 Goods = await _speedyContext.Goods.FirstAsync(g => g.Id == orderDto.GoodsId),
                 LoadingAddress = orderDto.LoadingAddress,
@@ -42,7 +42,7 @@ public class OrderService : IOrderService
     public async Task<OrderToShow> GetOrder(long id)
     {
         List<Order> orders =
-            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o => o.Goods)
+            await _speedyContext.Orders.Include(o => o.Company).Include(o => o.User).Include(o => o.Goods)
                 .ToListAsync();
         var order = orders.FirstOrDefault(o => o.Id == id);
         if (order != null)
@@ -54,7 +54,7 @@ public class OrderService : IOrderService
     public async Task<List<OrderToShow>> GetAllOrders()
     {
         List<OrderToShow> orders =
-            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.Driver).Include(o => o.Goods)
+            (await _speedyContext.Orders.Include(o => o.Company).Include(o => o.User).Include(o => o.Goods)
                 .ToListAsync())
             .Select(order => OrderToShow(order)).ToList();
         return orders;
@@ -68,11 +68,11 @@ public class OrderService : IOrderService
             if (order != null)
             {
                 var company = await _speedyContext.Companies.FirstOrDefaultAsync(c => c.Id == orderDto.CompanyId);
-                var driver = await _speedyContext.Drivers.FirstOrDefaultAsync(d => d.Id == orderDto.DriverId);
+                var user = await _speedyContext.Users.FirstOrDefaultAsync(d => d.Id == orderDto.UserId);
                 var goods = await _speedyContext.Goods.FirstOrDefaultAsync(g => g.Id == orderDto.GoodsId);
 
                 order.Company = (company != null) ? company : order.Company;
-                order.Driver = (driver != null) ? driver : order.Driver;
+                order.User = (user != null) ? user : order.User;
                 order.Goods = (goods != null) ? goods : order.Goods;
                 order.LoadingAddress =
                     (orderDto.LoadingAddress != null) ? orderDto.LoadingAddress : order.LoadingAddress;
@@ -113,27 +113,27 @@ public class OrderService : IOrderService
         }
     }
 
-    public async Task<List<OrderToShow>> GetOrdersByDriverId(long driverId)
+    public async Task<List<OrderToShow>> GetOrdersByUserId(long userId)
     {
         try
         {
-            var uncompletedOrdersByDriver = await _speedyContext.Orders
-                .Include(order => order.Driver)
+            var uncompletedOrdersByUser = await _speedyContext.Orders
+                .Include(order => order.User)
                 .Include(order => order.Company)
                 .Include(order => order.Goods)
-                .Where(order => order.Driver.Id.Equals(driverId))
+                .Where(order => order.User.Id.Equals(userId))
                 .Where(order => order.UnloadingDate == null)
                 .ToListAsync();
 
-            var completedOrdersByDriver = await _speedyContext.Orders.Include(order => order.Driver)
+            var completedOrdersByUser = await _speedyContext.Orders.Include(order => order.User)
                 .Include(order => order.Company).Include(order => order.Goods)
-                .Where(order => order.Driver.Id.Equals(driverId))
+                .Where(order => order.User.Id.Equals(userId))
                 .Where(order => order.UnloadingDate != null)
                 .OrderByDescending(order => order.UnloadingDate)
                 .Take(2)
                 .ToListAsync();
 
-            var orders = uncompletedOrdersByDriver.Concat(completedOrdersByDriver).Select(order => OrderToShow(order))
+            var orders = uncompletedOrdersByUser.Concat(completedOrdersByUser).Select(order => OrderToShow(order))
                 .ToList();
 
             return orders;
@@ -151,7 +151,7 @@ public class OrderService : IOrderService
         {
             Id = order.Id,
             CompanyName = order.Company.Name,
-            DriverName = order.Driver.Name,
+            UserName = order.User.Name,
             GoodsName = order.Goods.Name,
             LoadingAddress = order.LoadingAddress,
             UnloadingAddress = order.UnloadingAddress,
