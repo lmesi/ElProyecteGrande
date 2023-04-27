@@ -23,12 +23,12 @@
 }
 
 .container {
-    text-align: center;
-    height: 100vh;
+  text-align: center;
+  height: 100vh;
 }
 
 .card {
-  margin-top: 15% !important;
+  margin-top: 5% !important;
   padding: 5%;
 }
 
@@ -52,7 +52,7 @@
 }
 
 #dateInput {
-  max-width: 50%;
+  max-width: 70%;
 }
 
 .date-modal-container {

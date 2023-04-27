@@ -165,3 +165,17 @@ p {
   padding: 26px;
   font-weight: bold;
 }
+
+.orderDropdown {
+  width: 300px !important;
+  justify-content: center !important;
+  margin-bottom: 10px;
+}
+
+.deleteGoodsBtn {
+  margin-top: 5px;
+}
+
+.popup {
+  max-width: 300px !important;
+}

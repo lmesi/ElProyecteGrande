@@ -57,58 +57,60 @@ const DriverOrders = () => {
       });
   };
 
-  if (orders === null) return <h1>Loading...</h1>;
-
   return (
-    <div>
-      <h1 className="titles">My orders</h1>
-      <div className="row justify-content-center">
-        <table className="table table-striped table-dark table-hover align-middle">
-          <thead className="tableHead">
-            <tr>
-              <th>Order Id</th>
-              <th>Company name</th>
-              <th>Loading address</th>
-              <th>Unloading address</th>
-              <th>Unloading date</th>
-              <th>Goods</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.companyName}</td>
-                <td>{order.loadingAddress}</td>
-                <td>{order.unloadingAddress}</td>
-                <td>{order.unloadingDate?.split("T")[0] ?? "uncompleted"}</td>
-                <td>{order.goodsName}</td>
-                <td>
-                  <button
-                    id="loadingDateBtn"
-                    className="editButton"
-                    onClick={() => {
-                      setShowModal(true);
-                      setOrderToShow(order);
-                    }}
-                  >
-                    Add unloading date
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {showModal && (
-        <AddDateModal
-          isOpen={setShowModal}
-          onUpdate={handleAddDate}
-          orderId={orderToShow.id}
-          defaultDate={orderToShow.unloadingDate ?? new Date().toJSON()}
-        />
-      )}
+    <div className="tableContainer">
+      {orders === null ? <h3>Loading...</h3> :
+        <div>
+          <h1 className="titles">My orders</h1>
+          <div className="row justify-content-center">
+            <table className="table table-striped table-dark table-hover align-middle">
+              <thead className="tableHead">
+                <tr>
+                  <th>Order Id</th>
+                  <th>Company name</th>
+                  <th>Loading address</th>
+                  <th>Unloading address</th>
+                  <th>Unloading date</th>
+                  <th>Goods</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    <td>{order.id}</td>
+                    <td>{order.companyName}</td>
+                    <td>{order.loadingAddress}</td>
+                    <td>{order.unloadingAddress}</td>
+                    <td>{order.unloadingDate?.split("T")[0] ?? "uncompleted"}</td>
+                    <td>{order.goodsName}</td>
+                    <td>
+                      <button
+                        id="loadingDateBtn"
+                        className="editButton"
+                        onClick={() => {
+                          setShowModal(true);
+                          setOrderToShow(order);
+                        }}
+                      >
+                        Add unloading date
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {showModal && (
+            <AddDateModal
+              isOpen={setShowModal}
+              onUpdate={handleAddDate}
+              orderId={orderToShow.id}
+              defaultDate={orderToShow.unloadingDate ?? new Date().toJSON()}
+            />
+          )}
+        </div>
+      }
     </div>
   );
 };
