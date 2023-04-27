@@ -3,6 +3,8 @@ using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Model.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Backend._JWTAuth;
+
 
 namespace Backend.Controllers
 {
@@ -58,7 +60,7 @@ namespace Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [HttpGet("/admin")]
         public async Task<IActionResult> GetAllAdmin()
         {
@@ -72,7 +74,9 @@ namespace Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
+        //test on driver endpoint
+        [_JWTAuth.Authorize]
         [HttpGet("/driver")]
         public async Task<IActionResult> GetAllDriver()
         {

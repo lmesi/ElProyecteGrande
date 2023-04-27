@@ -1,3 +1,4 @@
+using Backend.Model;
 using Backend.Model.DTO;
 using Backend.Model.dtoToShow;
 using Backend.Model.Entities;
@@ -14,5 +15,8 @@ public interface IUserService
     
     Task UpdateUser(User driver, long id);
     Task DeleteUser(long id);
+    Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
+
+    Task<User> GetUserForAuth(long userId);
 
 }
