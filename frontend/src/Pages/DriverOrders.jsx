@@ -100,6 +100,9 @@ const DriverOrders = () => {
                 ))}
               </tbody>
             </table>
+            <div className="row justify-content-center">
+              <button className="deleteButtonForPopUp logoutBtn" onClick={() => { navigate("/"); localStorage.clear() }}>Logout</button>
+            </div>
           </div>
           {showModal && (
             <AddDateModal

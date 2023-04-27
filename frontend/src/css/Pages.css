@@ -179,3 +179,7 @@ p {
 .popup {
   max-width: 300px !important;
 }
+
+.logoutBtn {
+  width: 90px !important;
+}
