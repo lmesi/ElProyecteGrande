@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Users.css";
-//import "../CompaniesPage.css";
+import "../css/Users.css";
 import Dropdown from "../Components/Dropdown";
 
 const fetchUsers = () => {
@@ -67,88 +66,91 @@ const Users = () => {
     setOrderDirection(newDirection);
   };
 
-  if (users === null) return <h1>Loading...</h1>;
+  //if (users === null) return <h1>Loading...</h1>;
 
   return (
     <div className="tableContainer">
-      <h1 className="titles">Users</h1>
-      <div className="row justify-content-center">
-        <div className="searchBar drop-container">
-          <label className="searchBar-flex-item">Search for user name: </label>
-          <input
-            className="searchBar-flex-item searchField"
-            type="text"
-            value={searchName}
-            onChange={(event) => setSearchName(event.target.value)}
-          />
-          <Dropdown
-            label={"Filter by role: "}
-            options={ROLES}
-            value={searchRole}
-            setValue={setSearchRole}
-          />
-        </div>
-      </div>
-      <div className="row justify-content-center">
-        <table className="table table-striped table-dark table-hover">
-          <thead className="tableHead">
-            <tr>
-              <th>
-                <button className="headButton" onClick={handleOrderBy}>
-                  Name {orderDirection === "ASC" ? "▲" : "▼"}
-                </button>
-              </th>
-              <th>Role</th>
-              <th>License Plate</th>
-              <th />
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {users
-              .filter((user) =>
-                user.name.toLowerCase().includes(searchName.toLowerCase())
-              )
-              .filter((user) => {
-                if (searchRole === "") return true;
-                return searchRole == user.role;
-              })
-              .sort((a, b) => sortByName(a.name, b.name, orderDirection))
-              .map((user) => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.role === 1 ? "Admin" : "Driver"}</td>
-                  <td>{user.licensePlate}</td>
-                  <td>
-                    <Link to={`/admin/users/update/${user.id}`}>
-                      <button className="editButton">Edit</button>
-                    </Link>
-                  </td>
-                  <td>
-                    <button
-                      className="deleteButton"
-                      onClick={() => {
-                        setShowModal(true);
-                        setUserToDelete(user);
-                      }}
-                    >
-                      Delete
+      {users === null ? <h3>Loading...</h3> :
+        <div>
+          <h1 className="titles">Users</h1>
+          <div className="row justify-content-center">
+            <div className="searchBar drop-container">
+              <label className="searchBar-flex-item">Search for user name: </label>
+              <input
+                className="searchBar-flex-item searchField"
+                type="text"
+                value={searchName}
+                onChange={(event) => setSearchName(event.target.value)}
+              />
+              <Dropdown
+                label={"Filter by role: "}
+                options={ROLES}
+                value={searchRole}
+                setValue={setSearchRole}
+              />
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <table className="table table-striped table-dark table-hover">
+              <thead className="tableHead">
+                <tr>
+                  <th>
+                    <button className="headButton" onClick={handleOrderBy}>
+                      Name {orderDirection === "ASC" ? "▲" : "▼"}
                     </button>
-                  </td>
+                  </th>
+                  <th>Role</th>
+                  <th>License Plate</th>
+                  <th />
+                  <th />
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-
-      {showModal && (
-        <Modal
-          close={setShowModal}
-          onDelete={handleDeleteUser}
-          id={userToDelete.id}
-          name={userToDelete.name}
-        />
-      )}
+              </thead>
+              <tbody>
+                {users
+                  .filter((user) =>
+                    user.name.toLowerCase().includes(searchName.toLowerCase())
+                  )
+                  .filter((user) => {
+                    if (searchRole === "") return true;
+                    return searchRole == user.role;
+                  })
+                  .sort((a, b) => sortByName(a.name, b.name, orderDirection))
+                  .map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.name}</td>
+                      <td>{user.role === 1 ? "Admin" : "Driver"}</td>
+                      <td>{user.licensePlate}</td>
+                      <td>
+                        <Link to={`/admin/users/update/${user.id}`}>
+                          <button className="editButton">Edit</button>
+                        </Link>
+                      </td>
+                      <td>
+                        <button
+                          className="deleteButton"
+                          onClick={() => {
+                            setShowModal(true);
+                            setUserToDelete(user);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          {showModal && (
+            <Modal
+              close={setShowModal}
+              onDelete={handleDeleteUser}
+              id={userToDelete.id}
+              name={userToDelete.name}
+            />
+          )}
+        </div>
+      }
     </div>
   );
 };

@@ -1,14 +1,13 @@
 .navbar {
     position: relative;
     background-color: #f39200 !important;
-    height: 85px;
+    height: 60px;
+    display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    box-shadow: 1px 2px 5px lightgray;
+    font-weight: bold;
     list-style-type: none;
-    position: fixed;
-    width: 100%;
 }
 
 .menu {
@@ -16,17 +15,19 @@
     justify-content: flex-end;
     align-items: center;
     height: 50px;
-    /* set a fixed height for the parent element */
     position: relative;
-    /* set the position property to relative */
+    margin-right: 10%;
+}
+
+.navHomeButton {
+    margin-left: 10%;
 }
 
 .dropdown {
-    position: absolute;
-    /* set the position property to absolute */
-    top: 100%;
-    /* position the dropdown below the buttons */
+    position: absolute !important;
+    top: 60px;
     left: 0;
+    width: 100%;
     max-height: 200px;
     overflow-y: auto;
     background-color: white;
@@ -34,6 +35,7 @@
     padding: 0;
     margin: 0;
     list-style: none;
+    z-index: 1;
 }
 
 .dropdown li {
@@ -45,13 +47,13 @@
 }
 
 .navbutton {
-    background-color: transparent;
     border: none;
+    background-color: #f39200;
     font-size: 16px;
     cursor: pointer;
     padding: 10px;
+    font-weight: bold;
     position: relative;
-    /* set the position property to relative */
 }
 
 .navbutton:hover {
@@ -64,21 +66,15 @@
 
 .nav-link {
     text-decoration: none;
-    /* remove underline */
     color: black;
-    /* change color */
 }
 
 .nav-link:hover {
     text-decoration: none;
-    /* remove underline */
     color: rgba(52, 40, 12, 0.162);
-    /* change color on hover */
 }
 
 .nav-link.active {
     text-decoration: none;
-    /* remove underline */
     color: rgb(73, 41, 13);
-    /* change color when active */
 }

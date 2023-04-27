@@ -13,7 +13,7 @@
 }
 
 .tableContainer {
-    height: 100vh;
+  height: 100vh;
 }
 
 .table {
@@ -121,18 +121,14 @@ input[type="radio"]:checked {
 }
 
 input[type="radio"] {
-  /* Hide the default radio button */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /* Add a custom background */
   background-color: #fff;
   border: 2px solid #999;
   border-radius: 50%;
-  /* Set the size of the radio button */
   width: 15px;
   height: 15px;
-  /* Add a transition effect */
   transition: border-color 0.3s ease;
   vertical-align: middle;
 }
@@ -148,19 +144,19 @@ input[type="radio"] {
 }
 
 .searchField:focus {
-    outline-color: #f39200 !important;
+  outline-color: #f39200 !important;
 }
 
 h1 {
-    color: white;
+  color: white;
 }
 
 h3 {
-    color: white;
+  color: white;
 }
 
 p {
-    color: white;
+  color: white;
 }
 
 .titles {
@@ -169,4 +165,3 @@ p {
   padding: 26px;
   font-weight: bold;
 }
-

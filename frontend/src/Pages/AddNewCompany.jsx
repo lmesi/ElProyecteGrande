@@ -1,5 +1,5 @@
 import { useState } from "react";
-import '../Form.css';
+import '../css/Form.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function AddNewCompany() {
@@ -41,7 +41,7 @@ export default function AddNewCompany() {
         <div className="container">
             <div className="row justify-content-center">
                 <div className="card card-custom">
-                    <h1>Add New Company:</h1>
+                    <h1>Add New Company</h1>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>

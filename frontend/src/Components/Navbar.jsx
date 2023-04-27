@@ -1,29 +1,50 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import '../Navbar.css'
+import '../css/Navbar.css'
+import '../css/Pages.css';
+import { useEffect } from "react";
+import { useRef } from "react";
+import { useState } from "react";
 
 export default function Navbar() {
     let listOfMenupoints = ["User", "Order", "Company"]; //CHANGE PARTENR TO COMPANY
     const [active, setActive] = React.useState("");
+    const [openMenu, setOpenMenu] = useState('');
+    const menuRef = useRef(null);
 
     const handleOpen = (menupoint) => {
         active === menupoint ?
             setActive("") :
             setActive(menupoint);
+        setOpenMenu(menupoint);
+        console.log(active)
     };
     function Showmenu(menupoint) {
-        return menupoint === active;
+        return openMenu === menupoint;
     }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+            setOpenMenu('');
+        }
+    };
 
     return (
         <nav className="navbar">
-            <NavLink className="nav-link" to="/admin">
+            <NavLink className="nav-link navHomeButton" to="/admin">
                 Home
             </NavLink>
-            <div className="menu">
-                {listOfMenupoints.map(menupoint => (<div key={menupoint}><button className="navbutton" onClick={e => handleOpen(menupoint)}>{menupoint === "Company" ? "Companies" : `${menupoint}s`}</button>
+            <div className="menu" ref={menuRef}>
+                {listOfMenupoints.map(menupoint => (<div className="navContainer" key={menupoint}><button className="navbutton" onClick={e => handleOpen(menupoint)}>{menupoint === "Company" ? "Companies" : `${menupoint}s`}</button>
                     {Showmenu(menupoint) ? (
-                        <ul className="dropdown" >
+                        <ul className="dropdown">
                             <li >
                                 <NavLink className="nav-link" to={menupoint === "Company" ? "/admin/companies" : `/admin/${menupoint.toLowerCase()}s`}>
                                     List all {menupoint === "Company" ? "companie" : menupoint.toLowerCase()}s

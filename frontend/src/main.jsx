@@ -1,9 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import AdminPage from "./AdminPage";
+import AdminPage from "./Pages/AdminPage";
 import OrdersListPage from "./Pages/OrdersListPage";
 import App from "./App";
-import "./index.css";
 import Companies from "./Pages/Companies";
 import AddNewCompany from "./Pages/AddNewCompany";
 import UpdateCompany from "./Pages/UpdateCompany";

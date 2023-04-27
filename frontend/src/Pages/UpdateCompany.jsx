@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import '../Form.css';
+import '../css/Form.css';
 
 export default function UpdateCompany() {
 
