@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
-
- [ApiController, Route("/Companies")]
+[_JWTAuth.Authorize]
+[ApiController, Route("/Companies")]
  public class CompanyController : ControllerBase
     { 
         private readonly ICompanyService _companyService;

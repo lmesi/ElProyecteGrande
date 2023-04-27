@@ -1,4 +1,6 @@
-﻿namespace Backend.Model;
+﻿using Backend.Model.Enum;
+
+namespace Backend.Model;
 
 using Model.Entities;
 
@@ -6,6 +8,7 @@ public class AuthenticateResponse
 {
     public long Id { get; set; }
     public string Username { get; set; }
+    public Role Role { get; set; }
     public string Token { get; set; }
 
 
@@ -13,6 +16,7 @@ public class AuthenticateResponse
     {
         Id = user.Id;
         Username = user.Name;
+        Role = user.Role;
         Token = token;
     }
 }

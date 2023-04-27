@@ -1,11 +1,10 @@
-using Backend.Model;
 using Backend.Model.DTO;
-using Backend.Model.Entities;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
+[_JWTAuth.Authorize]
 [ApiController, Route("/Goods")]
 public class GoodsController : ControllerBase
 {

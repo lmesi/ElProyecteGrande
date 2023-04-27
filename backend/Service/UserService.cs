@@ -27,12 +27,15 @@ public class UserService : IUserService
     {
         var users = await GetAllUsersForAuth();
         var user = users.SingleOrDefault(x => x.Name == model.Username && x.Password == model.Password);
-
+        
         // return null if user not found
         if (user == null) return null;
 
         // authentication successful so generate jwt token
         var token = generateJwtToken(user);
+        
+        var userRole = users.SingleOrDefault(u => u.Name == model.Username).Role;
+        user.Role = userRole;
 
         return new AuthenticateResponse(user, token);
     }

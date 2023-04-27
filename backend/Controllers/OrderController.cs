@@ -1,11 +1,10 @@
 using Backend.Model.DTO;
-using Backend.Model.Entities;
 using Backend.Service;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
+[_JWTAuth.Authorize]
 [ApiController, Route("/Orders")]
 public class OrderController : ControllerBase
 {
@@ -51,7 +50,7 @@ public class OrderController : ControllerBase
         bool success = await _orderService.DeleteOrder(id);
         return success ? Ok("Order deleted") : StatusCode(400, ErrorMessage);
     }
-    
+
     [HttpGet("/Driver/{userId}")]
     public async Task<IActionResult> GetOrdersByUserId(long userId)
     {

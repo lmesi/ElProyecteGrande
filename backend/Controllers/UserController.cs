@@ -2,121 +2,115 @@ using Backend.Model.Entities;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Model.DTO;
-using Microsoft.AspNetCore.Authorization;
-using Backend._JWTAuth;
 
+namespace Backend.Controllers;
 
-namespace Backend.Controllers
+[_JWTAuth.Authorize]
+[ApiController, Route("[controller]")]
+public class UsersController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class UsersController : ControllerBase
+    private readonly IUserService _userService;
+
+    public UsersController(IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public UsersController(IUserService userService)
+    [HttpPost]
+    public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
+    {
+        try
         {
-            _userService = userService;
+            await _userService.AddUser(userDto);
+            return Ok();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
+        catch (Exception ex)
         {
-            try
-            {
-                await _userService.AddUser(userDto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(long id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUser(long id)
+    {
+        try
         {
-            try
-            {
-                var user = await _userService.GetUser(id);
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var user = await _userService.GetUser(id);
+            return Ok(user);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        catch (Exception ex)
         {
-            try
-            {
-                var users = await _userService.GetAllUsers();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpGet("/admin")]
-        public async Task<IActionResult> GetAllAdmin()
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        try
         {
-            try
-            {
-                var users = await _userService.GetAllAdmin();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var users = await _userService.GetAllUsers();
+            return Ok(users);
         }
-
-        //test on driver endpoint
-        [_JWTAuth.Authorize]
-        [HttpGet("/driver")]
-        public async Task<IActionResult> GetAllDriver()
+        catch (Exception ex)
         {
-            try
-            {
-                var users = await _userService.GetAllDriver();
-                return Ok(users);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
         }
+    }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser([FromBody] User user, long id)
+    [HttpGet("/admin")]
+    public async Task<IActionResult> GetAllAdmin()
+    {
+        try
         {
-            try
-            {
-                await _userService.UpdateUser(user, id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var users = await _userService.GetAllAdmin();
+            return Ok(users);
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        catch (Exception ex)
         {
-            try
-            {
-                await _userService.DeleteUser(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("/driver")]
+    public async Task<IActionResult> GetAllDriver()
+    {
+        try
+        {
+            var users = await _userService.GetAllDriver();
+            return Ok(users);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateUser([FromBody] User user, long id)
+    {
+        try
+        {
+            await _userService.UpdateUser(user, id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(long id)
+    {
+        try
+        {
+            await _userService.DeleteUser(id);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

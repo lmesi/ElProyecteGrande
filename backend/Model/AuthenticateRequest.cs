@@ -1,4 +1,6 @@
-﻿namespace Backend.Model;
+﻿using Backend.Model.Enum;
+
+namespace Backend.Model;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -9,4 +11,5 @@ public class AuthenticateRequest
 
     [Required]
     public string Password { get; set; }
+    
 }

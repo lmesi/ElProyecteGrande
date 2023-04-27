@@ -5,8 +5,7 @@ using Backend.Model;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
-[ApiController]
-[Route("[controller]")]
+[ApiController, Route("[controller]")]
 public class LoginController : ControllerBase
 {
     private IUserService _userService;
