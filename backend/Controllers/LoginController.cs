@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("[controller]")]
-public class TestController : ControllerBase
+public class LoginController : ControllerBase
 {
     private IUserService _userService;
 
-    public TestController(IUserService userService)
+    public LoginController(IUserService userService)
     {
         _userService = userService;
     }
@@ -29,7 +29,7 @@ public class TestController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult LoginTest()
     {
         return Ok("Auth success");
     }
