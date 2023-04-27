@@ -1,7 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
+import AddOrDeleteGoods from "../Components/AddOrDelGoods";
+import FormForOrders from "../Components/FormForOrders";
 export default function OrdersUpdatePage() {
     const id = useParams().id;
     const [data, setData] = useState([]);
@@ -120,120 +121,39 @@ export default function OrdersUpdatePage() {
         }
     };
 
-    let handleAddGoodsSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            let res = await fetch("/api/Goods", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-                body: JSON.stringify({
-                    name: goods,
-                }),
-            });
-            if (res.status === 200) {
-                setGoods("");
-            }
-        } catch (err) {
-            console.log(err);
-        }
-        setShow(false);
-        setGoodsData([]);
-    };
-
-    let deleteGoods = async () => {
-        try {
-            let res = await fetch(`/api/Goods/${goods}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-                body: JSON.stringify({
-                    name: goods,
-                }),
-            });
-            if (res.status === 200) {
-            }
-        } catch (err) {
-            console.log(err);
-        }
-        setGoodsData([]);
-        setShow(false);
-    };
-
-    const setGoodsForDelete = (toDelete) => {
-        setGoods(toDelete);
-    };
-
     return (
         <div className="container">
             <div className="row justify-content-center">
                 <div className="card card-custom">
                     <h1>Edit order number {id}</h1>
                     {(companyData.length > 0 && driverData.length > 0 && goodsData.length > 0 && data.id !== undefined) ?
-                        <form className="form" onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <select className="form-select orderDropdown mx-auto" value={data.company} name="company" onChange={(e) => setCompany(e.target.value)}>
-                                    <option value="" disabled >select company</option>
-                                    {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label>
-                                    Loading address:
-                                    <input className="form-control" type="text" value={data.loadingPlace} onChange={(e) => setLoadingPlace(e.target.value)} />
-                                </label>
-                            </div>
-                            <div className="form-group">
-                                <label>
-                                    Unloading address:
-                                    <input className="form-control" type="text" value={data.unloadingPlace} onChange={(e) => setUnloadingPlace(e.target.value)} />
-                                </label>
-                            </div>
-                            <div className="form-group">
-                                <select className="form-select orderDropdown mx-auto" value={data.user} name="Driver" onChange={(e) => setDriver(e.target.value)}>
-                                    <option value="" disabled >select driver</option>
-                                    {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <select className="form-select orderDropdown mx-auto" value={data.goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
-                                    <option value="" disabled >select goods</option>
-                                    {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name}</option>))}
-                                </select>
-                                <button className="btn btn-primary" onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>
-                            </div>
-                            <input className="btn btn-primary deleteGoodsBtn" type="submit" value="Submit" />
-
-                        </form>
+                        <FormForOrders
+                            handleSubmit={handleSubmit}
+                            companyData={companyData}
+                            company={company}
+                            loadingPlace={loadingPlace}
+                            unloadingPlace={unloadingPlace}
+                            driver={driver}
+                            goods={goods}
+                            driverData={driverData}
+                            setCompany={setCompany}
+                            setDriver={setDriver}
+                            setLoadingPlace={setLoadingPlace}
+                            setUnloadingPlace={setUnloadingPlace}
+                            goodsData={goodsData}
+                            setGoods={setGoods}
+                            setShow={setShow}
+                        />
                         : <h1>Loading...</h1>}
                     {message === "" ? "" : <p>{message}</p>}
                     {show ?
-                        <div className="blackout">
-                            <div className="popup">
-                                <form className="form" onSubmit={handleAddGoodsSubmit}>
-                                    <div className="formElement">
-                                        <label>
-                                            Add new goods:
-                                            <input className="form-control" type="text" value={goods} onChange={(e) => setGoods(e.target.value)} />
-                                        </label>
-                                        <input className="btn btn-primary deleteGoodsBtn" type="submit" value="Submit" />
-                                        <label>
-                                            Delete this record of goods:
-                                            <select className="form-select" value={goods} name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
-                                                <option value="" disabled selected hidden>select goods</option>
-                                                {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
-                                            </select>
-                                            <button className="btn btn-primary deleteGoodsBtn" onClick={(e) => { e.preventDefault(); deleteGoods(); }}>Delete</button>
-                                        </label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div> : ""}
+                        <AddOrDeleteGoods
+                            setGoods={setGoods}
+                            goodsData={goodsData}
+                            goods={goods}
+                            setGoodsData={setGoodsData}
+                            setShow={setShow} />
+                        : ""}
                 </div>
             </div>
         </div>
