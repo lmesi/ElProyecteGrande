@@ -12,6 +12,10 @@
   z-index: 999;
 }
 
+.tableContainer {
+    height: 100vh;
+}
+
 .table {
   margin-top: 1% !important;
   width: 80% !important;

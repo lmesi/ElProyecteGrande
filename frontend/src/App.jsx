@@ -7,9 +7,11 @@ function App() {
   return (
     <div className="App">
       <Outlet />
-      <div className="logoContainer">
-        {location.pathname === '/' ? <img src={logo} alt="Logo" /> : <></>}
-      </div>
+      {location.pathname === '/' && (
+        <div className="logoContainer">
+          <img src={logo} alt="Logo" />
+        </div>
+      )}
     </div>
   )
 }
