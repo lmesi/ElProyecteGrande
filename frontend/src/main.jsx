@@ -22,18 +22,18 @@ const router = createBrowserRouter([
           element: <AdminPage />,
           children:
             [
-                {
-                    path: "admin/companies",
-                    element: <Companies />
-                },
-                {
-                    path: "admin/companies/addnew",
-                    element: <AddNewCompany />
-                },
-                {
-                    path: "admin/companies/update/:id",
-                    element: <UpdateCompany />
-                },
+              {
+                path: "/admin/companies",
+                element: <Companies />
+              },
+              {
+                path: "/admin/companies/addnew",
+                element: <AddNewCompany />
+              },
+              {
+                path: "/admin/companies/update/:id",
+                element: <UpdateCompany />
+              },
               {
                 path: "/admin/orders",
                 element: <OrdersListPage />
