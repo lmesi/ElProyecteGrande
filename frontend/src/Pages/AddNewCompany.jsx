@@ -1,65 +1,95 @@
-import { useState } from "react";
-import '../css/Form.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState, useEffect } from "react";
+import "../css/Form.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function AddNewCompany() {
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
 
-    const [companyName, setCompanyName] = useState("");
-    const [companyAddress, setCompanyAddress] = useState("");
-
-    function handleNameChange(e) {
-        setCompanyName(e.target.value);
+  useEffect(() => {
+    if (localStorage.getItem("role") !== "1") {
+      localStorage.clear();
+      navigate("/");
     }
+  }, []);
 
-    function handleAddressChange(e) {
-        setCompanyAddress(e.target.value);
-    }
+  function handleNameChange(e) {
+    setCompanyName(e.target.value);
+  }
 
-    function handleSubmit(e) {
-        e.preventDefault();
+  function handleAddressChange(e) {
+    setCompanyAddress(e.target.value);
+  }
 
-        const company = {
-            name: companyName,
-            address: companyAddress,
-            orderIds: []
-        }
+  function handleSubmit(e) {
+    e.preventDefault();
 
-        fetch('/api/Companies', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(company)
-        }).then(response => {
-            console.log(response);
-        })
-            .catch(error => console.error(error));
+    const company = {
+      name: companyName,
+      address: companyAddress,
+      orderIds: [],
+    };
 
-        setCompanyAddress("");
-        setCompanyName("");
-    }
+    fetch("/api/Companies", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(company),
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.error(error));
+    setCompanyAddress("");
+    setCompanyName("");
+  }
 
-    return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="card card-custom">
-                    <h1>Add New Company</h1>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>
-                                Company Name:
-                                <input type="text" id="name" className="form-control" name="name" value={companyName} onChange={handleNameChange} />
-                            </label>
-                        </div>
-                        <div className="form-group">
-                            <label>
-                                Company Address:
-                                <input type="text" id="address" className="form-control" name="address" value={companyAddress} onChange={handleAddressChange} />
-                            </label>
-                        </div>
-                        <input type="submit" value="Add Company"
-                            className={companyName && companyAddress != "" ? "btn btn-primary" : "btn btn-primary disabled"} />
-                    </form>
-                </div>
+  return (
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="card card-custom">
+          <h1>Add New Company:</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>
+                Company Name:
+                <input
+                  type="text"
+                  id="name"
+                  className="form-control"
+                  name="name"
+                  value={companyName}
+                  onChange={handleNameChange}
+                />
+              </label>
             </div>
-        </div >
-    )
+            <div className="form-group">
+              <label>
+                Company Address:
+                <input
+                  type="text"
+                  id="address"
+                  className="form-control"
+                  name="address"
+                  value={companyAddress}
+                  onChange={handleAddressChange}
+                />
+              </label>
+            </div>
+            <input
+              type="submit"
+              value="Add Company"
+              className={
+                companyName && companyAddress != ""
+                  ? "btn btn-primary"
+                  : "btn btn-primary disabled"
+              }
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }

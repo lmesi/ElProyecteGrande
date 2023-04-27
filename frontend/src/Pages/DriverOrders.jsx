@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const fetchDriverOrders = (id) => {
-  return fetch(`/api/Driver/${id}`).then((res) => res.json());
+  return fetch(`/api/Driver/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then((res) => res.json());
 };
 
 const updateUnloadingDate = (orderId, date) => {
   return fetch(`/api/Orders/${orderId}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
     body: JSON.stringify({ unloadingDate: date }),
   });
 };
@@ -19,14 +27,21 @@ const DriverOrders = () => {
   const [showModal, setShowModal] = useState(false);
   const [orderToShow, setOrderToShow] = useState();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    fetchDriverOrders(id)
-      .then((data) => {
-        setOrders(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (localStorage.getItem("role") == "0") {
+      fetchDriverOrders(id)
+        .then((data) => {
+          setOrders(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      localStorage.clear();
+      navigate("/");
+    }
   }, []);
 
   const handleAddDate = (orderId, date) => {

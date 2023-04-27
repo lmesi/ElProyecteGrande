@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserForm from "../Components/UserForm";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,7 @@ const addUser = (user) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify(user),
   });
@@ -15,6 +16,13 @@ const addUser = (user) => {
 const AddUser = () => {
   const [addLoading, setAddLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("role") !== "1") {
+      localStorage.clear();
+      navigate("/");
+    }
+  }, []);
 
   const handleAddUser = (user) => {
     setAddLoading(true);

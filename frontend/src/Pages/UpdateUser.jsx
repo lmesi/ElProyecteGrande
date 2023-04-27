@@ -3,7 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../Components/UserForm";
 
 const fetchUsers = (id) => {
-  return fetch(`/api/Users/${id}`).then((res) => res.json());
+  return fetch(`/api/Users/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then((res) => res.json());
 };
 
 const update = (user, id) => {
@@ -11,6 +16,7 @@ const update = (user, id) => {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify(user),
   });
@@ -24,13 +30,18 @@ const UpdateUser = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchUsers(id)
-      .then((admin) => {
-        setUser(admin);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (localStorage.getItem("role") == "1") {
+      fetchUsers(id)
+        .then((admin) => {
+          setUser(admin);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      localStorage.clear();
+      navigate("/");
+    }
   }, []);
 
   const handleUpdateUser = (user, id) => {
