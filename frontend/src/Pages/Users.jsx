@@ -70,7 +70,7 @@ const Users = () => {
   if (users === null) return <h1>Loading...</h1>;
 
   return (
-    <div>
+    <div className="tableContainer">
       <h1 className="titles">Users</h1>
       <div className="row justify-content-center">
         <div className="searchBar drop-container">
