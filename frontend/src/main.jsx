@@ -10,6 +10,10 @@ import UpdateCompany from './Pages/UpdateCompany';
 import { createBrowserRouter, RouterProvider, } from "react-router-dom";
 import OrdersUpdatePage from './Pages/OrderUpdatePage'
 import AddNewOrder from './Pages/AddNewOrder'
+import AddUser from "./Pages/AddUser";
+import Users from "./Pages/Users";
+import UpdateUser from "./Pages/UpdateUser";
+import DriverOrders from "./Pages/DriverOrders";
 
 const router = createBrowserRouter([
   {
@@ -45,12 +49,29 @@ const router = createBrowserRouter([
               {
                 path: "/admin/orders/update/:id",
                 element: <OrdersUpdatePage />
-              }
+              },
+              {
+                path: "/admin/users",
+                element: <Users />,
+              },
+              {
+                path: "/admin/users/addnew",
+                element: <AddUser />,
+              },
+              {
+                path: "/admin/users/update/:id",
+                element: <UpdateUser />,
+              },
+              {
+                path: "/driver/:id",
+                element: <DriverOrders />,
+              },
             ]
         },
       ]
-  }
-])
+    }
+]);
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
