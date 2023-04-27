@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import OrderForm from "../Components/FormForOrderAddOrUpdate";
 
 export default function OrdersUpdatePage() {
     const id = useParams().id
