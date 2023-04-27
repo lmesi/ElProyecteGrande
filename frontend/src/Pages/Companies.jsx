@@ -51,11 +51,11 @@ export default function Companies() {
     };
 
     return (
-        <>
+        <div className="tableContainer">
             {companies.length < 1 ? <h3>Loading...</h3> :
                 <div>
                     <SearchBarCompanies companies={companies} setCompaniesToShow={setCompaniesToShow} />
-                    <div class="row justify-content-center">
+                    <div className="row justify-content-center">
                         <table className="table table-striped table-dark table-hover">
                             <thead className="tableHead">
                                 <tr>
@@ -98,6 +98,6 @@ export default function Companies() {
                         setCompaniesToShow={setCompaniesToShow} /> : <></>}
                 </div>
             }
-        </>
+        </div>
     )
 }
