@@ -38,6 +38,9 @@ export default function Navbar() {
 
     return (
         <nav className="navbar">
+            <NavLink onClick={() => localStorage.clear()} className="nav-link navHomeButton" to="/">
+                Logout
+            </NavLink>
             <NavLink className="nav-link navHomeButton" to="/admin">
                 Home
             </NavLink>
