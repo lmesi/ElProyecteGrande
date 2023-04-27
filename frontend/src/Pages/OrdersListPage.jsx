@@ -87,6 +87,8 @@ function OrdersListPage() {
                                 <th>Unloading time<div><Filter whatToFilter={["Finished", "Not finished"]} onFilterSelect={e => handleFiltering(e, 4)} /></div></th>
                                 <th>Driver<div><Filter whatToFilter={data.map(order => order.userName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 5)} /></div></th>
                                 <th>Goods<div><Filter whatToFilter={data.map(order => order.goodsName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 6)} /></div></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
