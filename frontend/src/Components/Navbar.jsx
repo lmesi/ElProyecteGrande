@@ -6,12 +6,10 @@ export default function Navbar() {
     let listOfMenupoints = ["User", "Order", "Company"]; //CHANGE PARTENR TO COMPANY
     const [active, setActive] = React.useState("");
 
-
     const handleOpen = (menupoint) => {
         active === menupoint ?
             setActive("") :
             setActive(menupoint);
-        console.log(active)
     };
     function Showmenu(menupoint) {
         return menupoint === active;
