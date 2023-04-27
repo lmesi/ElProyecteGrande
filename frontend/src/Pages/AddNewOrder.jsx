@@ -34,12 +34,6 @@ export default function AddNewOrder() {
 
     let handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("company " + company);
-        console.log(loadingPlace);
-        console.log(unloadingPlace);
-        console.log("driver: " + driver)
-        console.log("goods: " + goods);
-
         try {
             let res = await fetch("/api/Orders", {
                 method: "POST",
@@ -120,8 +114,8 @@ export default function AddNewOrder() {
                     <div className="card card-custom">
                         <form className="form" onSubmit={handleSubmit}>
                             <div className="formElement">
-                                <select defaultValue={company} name="company" onChange={(e) => setCompany(e.target.value)}>
-                                    <option value="" disabled selected hidden>select company</option>
+                                <select value={company} name="company" onChange={(e) => setCompany(e.target.value)}>
+                                    <option value="" disabled >select company</option>
                                     {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
                                 </select>
                             </div>
@@ -138,14 +132,14 @@ export default function AddNewOrder() {
                                 </label>
                             </div>
                             <div className="form-group">
-                                <select defaultValue={driver} name="Driver" onChange={(e) => setDriver(e.target.value)}>
-                                    <option value="" disabled selected hidden>select driver</option>
+                                <select value={driver} name="Driver" onChange={(e) => setDriver(e.target.value)}>
+                                    <option value="" disabled hidden>select driver</option>
                                     {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
                                 </select>
                             </div>
                             <div className="form-group">
                                 <select value={goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
-                                    <option value="" disabled selected hidden>select goods</option>
+                                    <option value="" disabled >select goods</option>
                                     {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
                                 </select>
                                 <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>

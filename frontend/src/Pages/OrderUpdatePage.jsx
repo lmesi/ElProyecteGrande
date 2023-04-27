@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 
 export default function OrdersUpdatePage() {
     const id = useParams().id
-    console.log(id)
     const [data, setData] = useState([]);
     const [message, setMessage] = useState("");
     const [company, setCompany] = useState("");
@@ -20,7 +19,6 @@ export default function OrdersUpdatePage() {
     }
     useEffect(() => {
         fetchData();
-        console.log(data);
     }, [data.length]);
 
     const [companyData, setCompanyData] = useState([]);
@@ -49,12 +47,6 @@ export default function OrdersUpdatePage() {
     }, [goodsData.length]);
     let handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(data)
-        console.log("company " + company);
-        console.log(loadingPlace);
-        console.log(unloadingPlace)
-        console.log("driver" + driver)
-        console.log("goods: " + goods);
         let datas = {
             companyId: company === data.company ? "" : company,
             loadingAddress: loadingPlace === data.loqadingPlace ? "" : loadingPlace,
@@ -64,7 +56,6 @@ export default function OrdersUpdatePage() {
         }
         let dataToFetch = {};
         Object.entries(datas).map(pair => pair[1] !== "" ? dataToFetch[pair[0]] = pair[1] : '')
-        console.log(dataToFetch)
         try {
             let res = await fetch(`/api/Orders/${id}`, {
                 method: "PUT",
@@ -141,8 +132,8 @@ export default function OrdersUpdatePage() {
                     {(companyData.length > 0 && driverData.length > 0 && goodsData.length > 0 && data.id !== undefined) ?
                         <form className="form" onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <select defaultValue={data.company} name="company" onChange={(e) => setCompany(e.target.value)}>
-                                    <option value="" disabled selected hidden>select company</option>
+                                <select value={data.company} name="company" onChange={(e) => setCompany(e.target.value)}>
+                                    <option value="" disabled >select company</option>
                                     {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
                                 </select>
                             </div>
@@ -159,14 +150,14 @@ export default function OrdersUpdatePage() {
                                 </label>
                             </div>
                             <div className="form-group">
-                                <select defaultValue={data.user} name="Driver" onChange={(e) => setDriver(e.target.value)}>
-                                    <option value="" disabled selected hidden>select driver</option>
+                                <select value={data.user} name="Driver" onChange={(e) => setDriver(e.target.value)}>
+                                    <option value="" disabled >select driver</option>
                                     {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
                                 </select>
                             </div>
                             <div className="form-group">
                                 <select value={data.goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
-                                    <option value="" disabled selected hidden>select goods</option>
+                                    <option value="" disabled >select goods</option>
                                     {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name}</option>))}
                                 </select>
                                 <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>

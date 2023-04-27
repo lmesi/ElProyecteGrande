@@ -13,9 +13,7 @@ function OrdersListPage() {
             .then((json) => { setData(json); setFilteredData(json) }).catch(e => console.log(e.message));;
     }
     useEffect(() => {
-        console.log("listing orders");
         fetchData();
-        console.log(data)
     }, [data.length]);
 
     const [open, setOpen] = useState(false);
