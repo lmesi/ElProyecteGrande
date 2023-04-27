@@ -19,20 +19,20 @@ export default function Navbar() {
 
     return (
         <nav className="navbar">
-            <NavLink class="nav-link" to="/admin">
+            <NavLink className="nav-link" to="/admin">
                 Home
             </NavLink>
             <div className="menu">
                 {listOfMenupoints.map(menupoint => (<div key={menupoint}><button className="navbutton" onClick={e => handleOpen(menupoint)}>{menupoint === "Company" ? "Companies" : `${menupoint}s`}</button>
                     {Showmenu(menupoint) ? (
-                        <ul class="dropdown" >
+                        <ul className="dropdown" >
                             <li >
-                                <NavLink class="nav-link" to={menupoint === "Company" ? "/admin/companies" : `/admin/${menupoint.toLowerCase()}s`}>
+                                <NavLink className="nav-link" to={menupoint === "Company" ? "/admin/companies" : `/admin/${menupoint.toLowerCase()}s`}>
                                     List all {menupoint === "Company" ? "companie" : menupoint.toLowerCase()}s
                                 </NavLink>
                             </li>
                             <li >
-                                <NavLink class="nav-link" to={menupoint === "Company" ? "/admin/companies/addnew" : `/admin/${menupoint.toLowerCase()}s/addnew`}>
+                                <NavLink className="nav-link" to={menupoint === "Company" ? "/admin/companies/addnew" : `/admin/${menupoint.toLowerCase()}s/addnew`}>
                                     Add new {menupoint === "Company" ? "companie" : menupoint.toLowerCase()}s
                                 </NavLink>
                             </li>

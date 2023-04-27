@@ -76,7 +76,7 @@ function OrdersListPage() {
     }, [data, filterOptions]);
     return (
         <div className="container">
-            <div class="row justify-content-center">
+            <div className="row justify-content-center">
                 <h1>Orders</h1>
                 {data.length > 0 ? <div>
                     <table className="table table-striped table-dark table-hover">
