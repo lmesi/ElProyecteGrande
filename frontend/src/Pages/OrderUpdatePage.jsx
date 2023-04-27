@@ -34,7 +34,7 @@ export default function OrdersUpdatePage() {
             .then((json) => setCompanyData(json)).catch(e => console.log(e.message));;
     }
     function fetchDrivers() {
-        fetch("/api/users/driver")
+        fetch("/api/driver")
             .then((response) => response.json())
             .then((json) => setDriverData(json)).catch(e => console.log(e.message));;
     }
@@ -60,7 +60,7 @@ export default function OrdersUpdatePage() {
             companyId: company === data.company ? "" : company,
             loadingAddress: loadingPlace === data.loqadingPlace ? "" : loadingPlace,
             unloadingAddress: unloadingPlace === data.unloadingPlace ? "" : unloadingPlace,
-            driverId: driver === data.driver ? "" : driver,
+            userId: driver === data.user ? "" : driver,
             goodsId: goods === data.goods ? "" : goods,
         }
         let dataToFetch = {};
@@ -135,66 +135,70 @@ export default function OrdersUpdatePage() {
         setGoods(toDelete);
     }
     return (
-        <div>
-            <h1>Edit data ({id})</h1>
-            {(companyData.length > 0 && driverData.length > 0 && goodsData.length > 0 && data.id !== undefined) ?
-                <form className="form" onSubmit={handleSubmit}>
-                    <div className="formElement">
-                        <select defaultValue={data.company} name="company" onChange={(e) => setCompany(e.target.value)}>
-                            <option value="" disabled selected hidden>select company</option>
-                            {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
-                        </select>
-                    </div>
-                    <div className="formElement">
-                        <label>
-                            Loading address:
-                            <input type="text" value={data.loadingPlace} onChange={(e) => setLoadingPlace(e.target.value)} />
-                        </label>
-                    </div>
-                    <div className="formElement">
-                        <label>
-                            Unloading address:
-                            <input type="text" value={data.unloadingPlace} onChange={(e) => setUnloadingPlace(e.target.value)} />
-                        </label>
-                    </div>
-                    <div className="formElement">
-                        <select defaultValue={data.driver} name="Driver" onChange={(e) => setDriver(e.target.value)}>
-                            <option value="" disabled selected hidden>select driver</option>
-                            {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
-                        </select>
-                    </div>
-                    <div className="formElement">
-                        <select value={data.goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
-                            <option value="" disabled selected hidden>select goods</option>
-                            {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name}</option>))}
-                        </select>
-                        <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>
-                    </div>
-                    <input type="submit" value="Submit" />
-
-                </form>
-                : <h1>Loading...</h1>}
-            {message === "" ? "" : <p>{message}</p>}
-            {show ?
-                <div>
-                    <form className="form" onSubmit={handleAddGoodsSubmit}>
-                        <div className="formElement">
-                            <label>
-                                Add new goods:
-                                <input type="text" value={goods} onChange={(e) => setGoods(e.target.value)} />
-                            </label>
-                            <input type="submit" value="Submit" />
-                            <label>
-                                Delete this record of goods:
-                                <select value={goods} name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
-                                    <option value="" disabled selected hidden>select goods</option>
-                                    {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="card card-custom">
+                    <h1>Edit order number {id}</h1>
+                    {(companyData.length > 0 && driverData.length > 0 && goodsData.length > 0 && data.id !== undefined) ?
+                        <form className="form" onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <select defaultValue={data.company} name="company" onChange={(e) => setCompany(e.target.value)}>
+                                    <option value="" disabled selected hidden>select company</option>
+                                    {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
                                 </select>
-                                <button onClick={(e) => { e.preventDefault(); deleteGoods(); }}>X</button>
-                            </label>
-                        </div>
-                    </form>
-                </div> : ""}
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                    Loading address:
+                                    <input className="form-control" type="text" value={data.loadingPlace} onChange={(e) => setLoadingPlace(e.target.value)} />
+                                </label>
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                    Unloading address:
+                                    <input className="form-control" type="text" value={data.unloadingPlace} onChange={(e) => setUnloadingPlace(e.target.value)} />
+                                </label>
+                            </div>
+                            <div className="form-group">
+                                <select defaultValue={data.user} name="Driver" onChange={(e) => setDriver(e.target.value)}>
+                                    <option value="" disabled selected hidden>select driver</option>
+                                    {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <select value={data.goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
+                                    <option value="" disabled selected hidden>select goods</option>
+                                    {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name}</option>))}
+                                </select>
+                                <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>
+                            </div>
+                            <input className="btn btn-primary" type="submit" value="Submit" />
+
+                        </form>
+                        : <h1>Loading...</h1>}
+                    {message === "" ? "" : <p>{message}</p>}
+                    {show ?
+                        <div>
+                            <form className="form" onSubmit={handleAddGoodsSubmit}>
+                                <div className="formElement">
+                                    <label>
+                                        Add new goods:
+                                        <input className="form-control" type="text" value={goods} onChange={(e) => setGoods(e.target.value)} />
+                                    </label>
+                                    <input className="btn btn-primary" type="submit" value="Submit" />
+                                    <label>
+                                        Delete this record of goods:
+                                        <select value={goods} name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
+                                            <option value="" disabled selected hidden>select goods</option>
+                                            {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
+                                        </select>
+                                        <button className="btn btn-primary" onClick={(e) => { e.preventDefault(); deleteGoods(); }}>Delete</button>
+                                    </label>
+                                </div>
+                            </form>
+                        </div> : ""}
+                </div>
+            </div>
         </div>
     );
 }

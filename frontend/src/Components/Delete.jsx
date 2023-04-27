@@ -2,10 +2,10 @@ export default function Delete(props) {
     const { isOpen, content, onConfirm, onClose } = props;
     return (<>
         {isOpen ?
-            <div>
+            <div className="popup">
                 <h3>{content}</h3>
-                <button onClick={onConfirm}>Yes</button>
-                <button onClick={onClose}>No</button>
+                <button className="deleteButtonForPopUp" onClick={onConfirm}>Yes</button>
+                <button className="cancelButtonForPopUp" onClick={onClose}>No</button>
             </div> : ""}</>
     );
 }

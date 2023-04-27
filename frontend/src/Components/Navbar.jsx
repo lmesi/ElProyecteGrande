@@ -18,27 +18,27 @@ export default function Navbar() {
     }
 
     return (
-        <div className="Navigation">
-            <nav className="navbar">
-                <NavLink to="/admin">
-                    Home
-                </NavLink>
-                {listOfMenupoints.map(menupoint => (<div key={menupoint}><button onClick={e => handleOpen(menupoint)}>{menupoint === "Company" ? "Companies" : `${menupoint}s`}</button>
+        <nav className="navbar">
+            <NavLink class="nav-link" to="/admin">
+                Home
+            </NavLink>
+            <div className="menu">
+                {listOfMenupoints.map(menupoint => (<div key={menupoint}><button className="navbutton" onClick={e => handleOpen(menupoint)}>{menupoint === "Company" ? "Companies" : `${menupoint}s`}</button>
                     {Showmenu(menupoint) ? (
-                        <ul >
+                        <ul class="dropdown" >
                             <li >
-                                <NavLink to={menupoint === "Company" ? "/admin/companies" : `/admin/${menupoint.toLowerCase()}s`}>
+                                <NavLink class="nav-link" to={menupoint === "Company" ? "/admin/companies" : `/admin/${menupoint.toLowerCase()}s`}>
                                     List all {menupoint === "Company" ? "companie" : menupoint.toLowerCase()}s
                                 </NavLink>
                             </li>
                             <li >
-                                <NavLink to={menupoint === "Company" ? "/admin/companies/addnew" : `/admin/${menupoint.toLowerCase()}s/addnew`}>
+                                <NavLink class="nav-link" to={menupoint === "Company" ? "/admin/companies/addnew" : `/admin/${menupoint.toLowerCase()}s/addnew`}>
                                     Add new {menupoint === "Company" ? "companie" : menupoint.toLowerCase()}s
                                 </NavLink>
                             </li>
                         </ul>
                     ) : null}</div>))}
-            </nav >
-        </div >
+            </div >
+        </nav >
     );
 }

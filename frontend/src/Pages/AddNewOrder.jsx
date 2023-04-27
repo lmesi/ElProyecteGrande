@@ -17,7 +17,7 @@ export default function AddNewOrder() {
             .then((json) => setCompanyData(json)).catch(e => console.log(e.message));;
     }
     function fetchDrivers() {
-        fetch("/api/users/driver")
+        fetch("/api/driver")
             .then((response) => response.json())
             .then((json) => setDriverData(json)).catch(e => console.log(e.message));;
     }
@@ -50,7 +50,7 @@ export default function AddNewOrder() {
                     companyId: company,
                     loadingAddress: loadingPlace,
                     unloadingAddress: unloadingPlace,
-                    driverId: driver,
+                    userId: driver,
                     goodsId: goods,
                 }),
             });
@@ -114,46 +114,50 @@ export default function AddNewOrder() {
         setGoods(toDelete);
     }
     return (
-        <div>
+        <div className="container">
             {(companyData.length > 0 && driverData.length > 0 && goodsData.length > 0) ?
-                <form className="form" onSubmit={handleSubmit}>
-                    <div className="formElement">
-                        <select defaultValue={company} name="company" onChange={(e) => setCompany(e.target.value)}>
-                            <option value="" disabled selected hidden>select company</option>
-                            {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
-                        </select>
+                <div className="row justify-content-center">
+                    <div className="card card-custom">
+                        <form className="form" onSubmit={handleSubmit}>
+                            <div className="formElement">
+                                <select defaultValue={company} name="company" onChange={(e) => setCompany(e.target.value)}>
+                                    <option value="" disabled selected hidden>select company</option>
+                                    {companyData.map(company => (<option key={`company${company.id}`} value={company.id} >{company.name}</option>))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                    Loading address:
+                                    <input type="text" className="form-control" value={loadingPlace} onChange={(e) => setLoadingPlace(e.target.value)} />
+                                </label>
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                    Unloading address:
+                                    <input type="text" className="form-control" value={unloadingPlace} onChange={(e) => setUnloadingPlace(e.target.value)} />
+                                </label>
+                            </div>
+                            <div className="form-group">
+                                <select defaultValue={driver} name="Driver" onChange={(e) => setDriver(e.target.value)}>
+                                    <option value="" disabled selected hidden>select driver</option>
+                                    {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <select value={goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
+                                    <option value="" disabled selected hidden>select goods</option>
+                                    {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
+                                </select>
+                                <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>
+                            </div>
+                            <input type="submit" value="Submit" className={company && loadingPlace && unloadingPlace && driver && goods != "" ? "btn btn-primary" : "btn btn-primary disabled"} />
+                        </form>
                     </div>
-                    <div className="formElement">
-                        <label>
-                            Loading address:
-                            <input type="text" value={loadingPlace} onChange={(e) => setLoadingPlace(e.target.value)} />
-                        </label>
-                    </div>
-                    <div className="formElement">
-                        <label>
-                            Unloading address:
-                            <input type="text" value={unloadingPlace} onChange={(e) => setUnloadingPlace(e.target.value)} />
-                        </label>
-                    </div>
-                    <div className="formElement">
-                        <select defaultValue={driver} name="Driver" onChange={(e) => setDriver(e.target.value)}>
-                            <option value="" disabled selected hidden>select driver</option>
-                            {driverData.map(driver => (<option key={`driver${driver.id}`} value={driver.id} >{driver.name}</option>))}
-                        </select>
-                    </div>
-                    <div className="formElement">
-                        <select value={goods} name="Goods" onChange={(e) => setGoods(e.target.value)}>
-                            <option value="" disabled selected hidden>select goods</option>
-                            {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
-                        </select>
-                        <button onClick={(e) => { e.preventDefault(); setShow(true) }}>Add or delete goods</button>
-                    </div>
-                    <input type="submit" value="Submit" />
-                </form>
+                </div>
                 : <h1>Loading...</h1>}
             {message === "" ? "" : <p>{message}</p>}
             {show ?
-                <div>
+                <div className="popup">
                     <form className="form" onSubmit={handleAddGoodsSubmit}>
                         <div className="formElement">
                             <label>

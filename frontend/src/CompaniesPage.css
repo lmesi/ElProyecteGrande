@@ -140,3 +140,15 @@ input[type="radio"] {
 .searchField:focus {
     outline-color: #f39200 !important;
 }
+
+h1 {
+    color: white;
+}
+
+h3 {
+    color: white;
+}
+
+p {
+    color: white;
+}
