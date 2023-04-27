@@ -13,12 +13,22 @@ export default function Companies() {
   const [companiesToShow, setCompaniesToShow] = useState([]);
 
   useEffect(() => {
-    fetch("/api/Companies")
-      .then((res) => res.json())
-      .then((res) => {
-        setCompanies(res);
-        setCompaniesToShow(res);
-      });
+    if (localStorage.getItem("role") == "1") {
+      fetch("/api/Companies", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setCompanies(res);
+          setCompaniesToShow(res);
+        });
+    } else {
+      localStorage.clear();
+      navigate("/");
+    }
   }, []);
 
   function handlePopUp(company) {
@@ -56,22 +66,35 @@ export default function Companies() {
 
   return (
     <div className="tableContainer">
-      {companies.length < 1 ? <h3>Loading...</h3> :
+      {companies.length < 1 ? (
+        <h3>Loading...</h3>
+      ) : (
         <div>
           <h1 className="titles">Companies</h1>
-          <SearchBarCompanies companies={companies} setCompaniesToShow={setCompaniesToShow} />
+          <SearchBarCompanies
+            companies={companies}
+            setCompaniesToShow={setCompaniesToShow}
+          />
           <div className="row justify-content-center">
             <table className="table table-striped table-dark table-hover">
               <thead className="tableHead">
                 <tr>
                   <th>
-                    <button type="button" className="headButton" onClick={handleSortClickByName}>
-                      Name {sortDirectionByName === 'asc' ? '▲' : '▼'}
+                    <button
+                      type="button"
+                      className="headButton"
+                      onClick={handleSortClickByName}
+                    >
+                      Name {sortDirectionByName === "asc" ? "▲" : "▼"}
                     </button>
                   </th>
                   <th>
-                    <button type="button" className="headButton" onClick={handleSortClickByAddress}>
-                      Address {sortDirectionByAddress === 'asc' ? '▲' : '▼'}
+                    <button
+                      type="button"
+                      className="headButton"
+                      onClick={handleSortClickByAddress}
+                    >
+                      Address {sortDirectionByAddress === "asc" ? "▲" : "▼"}
                     </button>
                   </th>
                   <th></th>
@@ -79,30 +102,46 @@ export default function Companies() {
                 </tr>
               </thead>
               <tbody>
-                {companies.length < 1 ? <></> : companiesToShow.map((company) => {
-                  return (
-                    <tr key={company.id}>
-                      <td>{company.name}</td>
-                      <td>{company.address}</td>
-                      <td>
-                        <Link to={`/admin/companies/update/${company.id}`}>
-                          <button className="editButton">Edit</button>
-                        </Link>
-                      </td>
-                      <td>
-                        <button className="deleteButton" onClick={() => handlePopUp(company)}>Delete</button>
-                      </td>
-                    </tr>
-                  )
-                })}
+                {companies.length < 1 ? (
+                  <></>
+                ) : (
+                  companiesToShow.map((company) => {
+                    return (
+                      <tr key={company.id}>
+                        <td>{company.name}</td>
+                        <td>{company.address}</td>
+                        <td>
+                          <Link to={`/admin/companies/update/${company.id}`}>
+                            <button className="editButton">Edit</button>
+                          </Link>
+                        </td>
+                        <td>
+                          <button
+                            className="deleteButton"
+                            onClick={() => handlePopUp(company)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
-          {showPopup ? <CompanyPopUp setCompanies={setCompanies}
-            companyToDelete={companyToDelete} setShowPopup={setShowPopup}
-            setCompaniesToShow={setCompaniesToShow} /> : <></>}
+          {showPopup ? (
+            <CompanyPopUp
+              setCompanies={setCompanies}
+              companyToDelete={companyToDelete}
+              setShowPopup={setShowPopup}
+              setCompaniesToShow={setCompaniesToShow}
+            />
+          ) : (
+            <></>
+          )}
         </div>
-      }
+      )}
     </div>
-  )
+  );
 }

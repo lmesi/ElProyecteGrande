@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "../css/Users.css";
+import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "../Components/Dropdown";
+import "../css/Users.css";
 
 const fetchUsers = () => {
-  return fetch("/api/Users").then((res) => res.json());
+  return fetch("/api/Users", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then((res) => res.json());
 };
 
 const deleteUser = (id) => {
   return fetch(`/api/Users/${id}`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
   });
 };
 
@@ -33,14 +42,21 @@ const Users = () => {
     { label: "Driver", value: 0 },
   ];
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    fetchUsers()
-      .then((data) => {
-        setUsers(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (localStorage.getItem("role") == "1") {
+      fetchUsers()
+        .then((data) => {
+          setUsers(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      localStorage.clear();
+      navigate("/");
+    }
   }, []);
 
   const handleDeleteUser = (id) => {
@@ -66,16 +82,18 @@ const Users = () => {
     setOrderDirection(newDirection);
   };
 
-  //if (users === null) return <h1>Loading...</h1>;
-
   return (
     <div className="tableContainer">
-      {users === null ? <h3>Loading...</h3> :
+      {users === null ? (
+        <h3>Loading...</h3>
+      ) : (
         <div>
           <h1 className="titles">Users</h1>
           <div className="row justify-content-center">
             <div className="searchBar drop-container">
-              <label className="searchBar-flex-item">Search for user name: </label>
+              <label className="searchBar-flex-item">
+                Search for user name:{" "}
+              </label>
               <input
                 className="searchBar-flex-item searchField"
                 type="text"
@@ -150,7 +168,7 @@ const Users = () => {
             />
           )}
         </div>
-      }
+      )}
     </div>
   );
 };
