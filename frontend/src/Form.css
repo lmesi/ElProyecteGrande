@@ -1,20 +1,25 @@
 .form-control {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .card-custom {
-    background-color: #f39200 !important;
-    justify-self: center !important;
+  background-color: #f39200 !important;
+  justify-self: center !important;
 }
 
 .card-custom {
-    width: 50% !important;
+  width: 50% !important;
 }
 
 .btn {
-    margin-bottom: 20px;
-    background-color: #242424 !important;
-    border: white !important;
+  margin-bottom: 20px;
+  background-color: #242424 !important;
+  border: white !important;
+}
+
+.btn-secondary {
+  background-color: #6c757d !important;
+  margin-left: 30px;
 }
 
 .container {
@@ -23,6 +28,35 @@
 }
 
 .card {
-    margin-top: 15% !important;
-    padding: 5%;
+  margin-top: 15% !important;
+  padding: 5%;
+}
+
+.select-container {
+  width: 120px;
+}
+
+.drop-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#select {
+  max-width: 40%;
+}
+
+.form-btn-container {
+  margin-top: 20px;
+}
+
+#dateInput {
+  max-width: 50%;
+}
+
+.date-modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

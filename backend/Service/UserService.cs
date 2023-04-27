@@ -1,5 +1,6 @@
 ﻿using Backend.Model;
 using Backend.Model.DTO;
+using Backend.Model.dtoToShow;
 using Backend.Model.Entities;
 using Backend.Model.Enum;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ public class UserService : IUserService
         var user = new User
         {
             Name = userDto.Name,
+            Password = userDto.Password,
             LicensePlate = userDto.LicensePlate,
             Role = userDto.Role
         };
@@ -28,7 +30,7 @@ public class UserService : IUserService
     }
    
 
-    public async Task<UserDto> GetUser(long userId)
+    public async Task<UserToShow> GetUser(long userId)
     {
      var user = await _context.Users
             .Where(d => d.Id == userId)
@@ -37,7 +39,6 @@ public class UserService : IUserService
                 Id = d.Id,
                 Name = d.Name,
                 LicensePlate = d.LicensePlate,
-                OrderIds = d.Orders.Select(o => o.Id).ToList(),
                 Role = d.Role
             })
             .FirstOrDefaultAsync();
@@ -47,56 +48,52 @@ public class UserService : IUserService
             throw new ArgumentException($"User with Id {userId} does not exist");
         }
         
-        return new UserDto()
+        return new UserToShow()
         {
             Id = user.Id,
             Name = user.Name,
             LicensePlate = user.LicensePlate,
-            OrderIds = user.OrderIds,
             Role = user.Role
         };
     }
    
-    public async Task<List<UserDto>> GetAllUsers()
+    public async Task<List<UserToShow>> GetAllUsers()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
     
-        return users.Select(user => new UserDto()
+        return users.Select(user => new UserToShow()
         {
             Id = user.Id,
             Name = user.Name,
             LicensePlate = user.LicensePlate, 
-            Password = user.Password,
             Role = user.Role,
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }
     
-    public async Task<List<UserDto>> GetAllAdmin()
+    public async Task<List<UserToShow>> GetAllAdmin()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
     
-        return users.Where(user => user.Role == Role.Admin).Select(user => new UserDto()
+        return users.Where(user => user.Role == Role.Admin).Select(user => new UserToShow()
         {
             Id = user.Id,
             Name = user.Name,
             LicensePlate = user.LicensePlate, 
-            Password = user.Password,
             Role = user.Role,
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }
     
-    public async Task<List<UserDto>> GetAllDriver()
+    public async Task<List<UserToShow>> GetAllDriver()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
     
-        return users.Where(user => user.Role == Role.Driver).Select(user => new UserDto()
+        return users.Where(user => user.Role == Role.Driver).Select(user => new UserToShow()
         {
             Id = user.Id,
             Name = user.Name,
             LicensePlate = user.LicensePlate, 
-            Password = user.Password,
             Role = user.Role,
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
@@ -104,16 +101,14 @@ public class UserService : IUserService
     
     public async Task UpdateUser(User user, long id)
     {
-        var existingUser = await GetUser(id);
-        if (existingUser == null)
-        {
-            throw new ArgumentException($"User with Id {user.Id} does not exist");
-        }
-        
-        user.Id = id;
-        _context.Entry(existingUser).State = EntityState.Detached;
-        _context.Entry(user).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        var userToUpdate = await _context.Users.Include(user => user.Orders)
+                .FirstAsync(user => user.Id == id);
+
+            userToUpdate.Name = user.Name;
+            userToUpdate.LicensePlate = user.LicensePlate;
+            userToUpdate.Role = user.Role;
+            
+            await _context.SaveChangesAsync();
     }
 
     public async Task DeleteUser(long id)
