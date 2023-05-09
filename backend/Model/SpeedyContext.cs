@@ -7,12 +7,13 @@ public class SpeedyContext : DbContext
 {
     public SpeedyContext(DbContextOptions<SpeedyContext> options) : base(options)
     {
+        Database.SetCommandTimeout(60);
     }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite(@"DataSource=db/database.db;");
-    }
+
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     // Set the query timeout to 60 seconds
+    // }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Company> Companies { get; set; }

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Model.Entities;
 
@@ -5,6 +6,7 @@ namespace Backend.Model.DTO;
 
 public class OrderDto
 {
+    [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
