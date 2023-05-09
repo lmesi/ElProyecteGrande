@@ -16,9 +16,19 @@ namespace BackendTests;
 
 public class UserServiceTests
 {
+    private UserService _userService;
+    private SpeedyContext _dbContext;
+
     [SetUp]
     public void Setup()
     {
+        _dbContext = GetMemoryContext();
+        if (_dbContext.Database.IsInMemory())
+        {
+            _dbContext.Database.EnsureDeleted();
+        }
+
+        _userService = CreateUserService(_dbContext);
     }
 
     [Test]
@@ -31,16 +41,10 @@ public class UserServiceTests
             LicensePlate = "asd-123",
             Role = Role.Driver
         };
-        var db = GetMemoryContext();
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
 
-        var userService = CreateUserService(db);
-        await userService.AddUser(userDto);
+        await _userService.AddUser(userDto);
 
-        var addedUser = db.Users.FirstOrDefault(u => u.Name == userDto.Name);
+        var addedUser = _dbContext.Users.FirstOrDefault(u => u.Name == userDto.Name);
         Assert.NotNull(addedUser);
         Assert.AreEqual(userDto.Name, addedUser.Name);
         Assert.AreEqual(userDto.Password, addedUser.Password);
@@ -58,17 +62,12 @@ public class UserServiceTests
             LicensePlate = "asd-123",
             Role = Role.Driver
         };
-        var db = GetMemoryContext();
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
 
-        var userService = CreateUserService(db);
-        await userService.AddUser(userDto);
-        var addedUser = db.Users.FirstOrDefault(u => u.Name == userDto.Name);
 
-        var result = await userService.GetUser(addedUser.Id);
+        await _userService.AddUser(userDto);
+        var addedUser = _dbContext.Users.FirstOrDefault(u => u.Name == userDto.Name);
+
+        var result = await _userService.GetUser(addedUser.Id);
 
         Assert.NotNull(result);
         Assert.AreEqual(addedUser.Id, result.Id);
@@ -77,19 +76,10 @@ public class UserServiceTests
         Assert.AreEqual(addedUser.Role, result.Role);
     }
 
-
     [Test]
     public async Task GetUserNonExistingTest()
     {
-        var db = GetMemoryContext();
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
-        var userService = CreateUserService(db);
-
-        Assert.ThrowsAsync<ArgumentException>(async () => { await userService.GetUser(-1); });
+        Assert.ThrowsAsync<ArgumentException>(async () => { await _userService.GetUser(-1); });
     }
 
     [Test]
@@ -102,17 +92,11 @@ public class UserServiceTests
             LicensePlate = "asd-123",
             Role = Role.Driver
         };
-        var db = GetMemoryContext();
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
 
-        var userService = CreateUserService(db);
-        await userService.AddUser(userDto);
-        var addedUser = db.Users.FirstOrDefault(u => u.Name == userDto.Name);
+        await _userService.AddUser(userDto);
+        var addedUser = _dbContext.Users.FirstOrDefault(u => u.Name == userDto.Name);
 
-        var result = await userService.GetUserForAuth(addedUser.Id);
+        var result = await _userService.GetUserForAuth(addedUser.Id);
 
         Assert.NotNull(result);
         Assert.AreEqual(addedUser.Id, result.Id);
@@ -121,36 +105,25 @@ public class UserServiceTests
         Assert.AreEqual(addedUser.LicensePlate, result.LicensePlate);
         Assert.AreEqual(addedUser.Role, result.Role);
     }
-
-
+    
     [Test]
     public async Task GetUserForAuthNonExistingTest()
     {
-        var db = GetMemoryContext();
-        var userService = CreateUserService(db);
-
-        Assert.ThrowsAsync<ArgumentException>(async () => { await userService.GetUserForAuth(-1); });
+        Assert.ThrowsAsync<ArgumentException>(async () => { await _userService.GetUserForAuth(-1); });
     }
 
     [Test]
     public async Task GetAllUserTest()
     {
-        var db = GetMemoryContext();
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
-        var userService = CreateUserService(db);
         var users = new List<User>
         {
             new User { Id = 1, Name = "John", Password = "123", LicensePlate = "", Role = Role.Admin },
             new User { Id = 2, Name = "Jane", Password = "asd", LicensePlate = "XYZ789", Role = Role.Driver }
         };
-        db.Users.AddRange(users);
-        await db.SaveChangesAsync();
+        _dbContext.Users.AddRange(users);
+        await _dbContext.SaveChangesAsync();
 
-        var result = await userService.GetAllUsers();
+        var result = await _userService.GetAllUsers();
 
         Assert.AreEqual(2, result.Count);
 
@@ -170,22 +143,15 @@ public class UserServiceTests
     [Test]
     public async Task GetAllUserForAuthTest()
     {
-        var db = GetMemoryContext();
-        var userService = CreateUserService(db);
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
         var users = new List<User>
         {
             new User { Id = 1, Name = "John", Password = "123", LicensePlate = "", Role = Role.Admin },
             new User { Id = 2, Name = "Jane", Password = "asd", LicensePlate = "XYZ789", Role = Role.Driver }
         };
-        db.Users.AddRange(users);
-        await db.SaveChangesAsync();
+        _dbContext.Users.AddRange(users);
+        await _dbContext.SaveChangesAsync();
 
-        var result = await userService.GetAllUsersForAuth();
+        var result = await _userService.GetAllUsersForAuth();
 
         Assert.AreEqual(2, result.Count);
 
@@ -207,22 +173,15 @@ public class UserServiceTests
     [Test]
     public async Task GetAllAdminTest()
     {
-        var db = GetMemoryContext();
-        var userService = CreateUserService(db);
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
         var users = new List<User>
         {
             new User { Id = 1, Name = "John", Password = "123", LicensePlate = "", Role = Role.Admin },
             new User { Id = 2, Name = "Jane", Password = "asd", LicensePlate = "XYZ789", Role = Role.Driver }
         };
-        db.Users.AddRange(users);
-        await db.SaveChangesAsync();
+        _dbContext.Users.AddRange(users);
+        await _dbContext.SaveChangesAsync();
 
-        var result = await userService.GetAllAdmin();
+        var result = await _userService.GetAllAdmin();
 
         Assert.AreEqual(1, result.Count);
 
@@ -236,22 +195,15 @@ public class UserServiceTests
     [Test]
     public async Task GetAllDriverTest()
     {
-        var db = GetMemoryContext();
-        var userService = CreateUserService(db);
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
         var users = new List<User>
         {
             new User { Id = 1, Name = "John", Password = "123", LicensePlate = "", Role = Role.Admin },
             new User { Id = 2, Name = "Jane", Password = "asd", LicensePlate = "XYZ789", Role = Role.Driver }
         };
-        db.Users.AddRange(users);
-        await db.SaveChangesAsync();
+        _dbContext.Users.AddRange(users);
+        await _dbContext.SaveChangesAsync();
 
-        var result = await userService.GetAllDriver();
+        var result = await _userService.GetAllDriver();
 
         Assert.AreEqual(1, result.Count);
 
@@ -265,13 +217,6 @@ public class UserServiceTests
     [Test]
     public async Task UpdateUserTest()
     {
-        var db = GetMemoryContext();
-        var userService = CreateUserService(db);
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
         var userToUpdate = new User
         {
             Id = 1,
@@ -281,8 +226,8 @@ public class UserServiceTests
             Role = Role.Driver
         };
 
-        await db.Users.AddAsync(userToUpdate);
-        await db.SaveChangesAsync();
+        await _dbContext.Users.AddAsync(userToUpdate);
+        await _dbContext.SaveChangesAsync();
 
         var updatedUser = new User
         {
@@ -292,9 +237,9 @@ public class UserServiceTests
             Role = Role.Driver
         };
 
-        await userService.UpdateUser(updatedUser, 1);
+        await _userService.UpdateUser(updatedUser, 1);
 
-        var userInDatabase = await userService.GetUser(1);
+        var userInDatabase = await _userService.GetUser(1);
 
         Assert.AreEqual(updatedUser.Name, userInDatabase.Name);
         Assert.AreEqual(updatedUser.LicensePlate, userInDatabase.LicensePlate);
@@ -304,13 +249,6 @@ public class UserServiceTests
     [Test]
     public async Task DeleteUserTest()
     {
-        var db = GetMemoryContext();
-        if (db.Database.IsInMemory())
-        {
-            db.Database.EnsureDeleted();
-        }
-
-        var userService = CreateUserService(db);
         var users = new List<User>
         {
             new User { Id = 1, Name = "John", Password = "123", LicensePlate = "", Role = Role.Admin },
@@ -327,15 +265,15 @@ public class UserServiceTests
                 Role = user.Role,
                 Password = user.Password
             };
-            await userService.AddUser(userToAdd);
+            await _userService.AddUser(userToAdd);
         }
 
-        await userService.DeleteUser(1);
+        await _userService.DeleteUser(1);
 
-        var result = await userService.GetAllUsers();
+        var result = await _userService.GetAllUsers();
 
         Assert.AreEqual(1, result.Count);
-        Assert.ThrowsAsync<ArgumentException>(async () => { await userService.GetUserForAuth(1); });
+        Assert.ThrowsAsync<ArgumentException>(async () => { await _userService.GetUserForAuth(1); });
     }
 
     private SpeedyContext GetMemoryContext()
