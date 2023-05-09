@@ -17,29 +17,30 @@ public class UserService : IUserService
 {
     private readonly SpeedyContext _context;
     private readonly AppSettings _appSettings;
+
     public UserService(SpeedyContext context, IOptions<AppSettings> appSettings)
     {
         _appSettings = appSettings.Value;
         _context = context;
     }
-    
+
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
     {
         var users = await GetAllUsersForAuth();
         var user = users.SingleOrDefault(x => x.Name == model.Username && x.Password == model.Password);
-        
+
         // return null if user not found
         if (user == null) return null;
 
         // authentication successful so generate jwt token
         var token = generateJwtToken(user);
-        
+
         var userRole = users.SingleOrDefault(u => u.Name == model.Username).Role;
         user.Role = userRole;
 
         return new AuthenticateResponse(user, token);
     }
-    
+
     private string generateJwtToken(User user)
     {
         // generate token that is valid for 7 days
@@ -49,12 +50,13 @@ public class UserService : IUserService
         {
             Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
             Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-   
+
     public async Task AddUser(UserDto userDto)
     {
         var user = new User
@@ -67,11 +69,11 @@ public class UserService : IUserService
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
     }
-   
+
 
     public async Task<UserToShow> GetUser(long userId)
     {
-     var user = await _context.Users
+        var user = await _context.Users
             .Where(d => d.Id == userId)
             .Select(d => new UserDto
             {
@@ -86,7 +88,7 @@ public class UserService : IUserService
         {
             throw new ArgumentException($"User with Id {userId} does not exist");
         }
-        
+
         return new UserToShow()
         {
             Id = user.Id,
@@ -95,7 +97,7 @@ public class UserService : IUserService
             Role = user.Role
         };
     }
-   
+
     public async Task<User> GetUserForAuth(long userId)
     {
         var user = await _context.Users
@@ -114,7 +116,7 @@ public class UserService : IUserService
         {
             throw new ArgumentException($"User with Id {userId} does not exist");
         }
-        
+
         return new User()
         {
             Id = user.Id,
@@ -122,14 +124,13 @@ public class UserService : IUserService
             Password = user.Password,
             Role = user.Role,
             LicensePlate = user.LicensePlate
-
         };
     }
-    
+
     public async Task<List<UserToShow>> GetAllUsers()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
-    
+
         return users.Select(user => new UserToShow()
         {
             Id = user.Id,
@@ -139,11 +140,11 @@ public class UserService : IUserService
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }
-    
+
     public async Task<List<User>> GetAllUsersForAuth()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
-    
+
         return users.Select(user => new User()
         {
             Id = user.Id,
@@ -153,64 +154,51 @@ public class UserService : IUserService
             Password = user.Password,
         }).ToList();
     }
-    
+
     public async Task<List<UserToShow>> GetAllAdmin()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
-    
+
         return users.Where(user => user.Role == Role.Admin).Select(user => new UserToShow()
         {
             Id = user.Id,
             Name = user.Name,
-            LicensePlate = user.LicensePlate, 
+            LicensePlate = user.LicensePlate,
             Role = user.Role,
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }
-    
+
     public async Task<List<UserToShow>> GetAllDriver()
     {
         var users = await _context.Users.Include(user => user.Orders).ToListAsync();
-    
+
         return users.Where(user => user.Role == Role.Driver).Select(user => new UserToShow()
         {
             Id = user.Id,
             Name = user.Name,
-            LicensePlate = user.LicensePlate, 
+            LicensePlate = user.LicensePlate,
             Role = user.Role,
             OrderIds = user.Orders.Select(o => o.Id).ToList()
         }).ToList();
     }
-    
+
     public async Task UpdateUser(User user, long id)
     {
         var userToUpdate = await _context.Users.Include(user => user.Orders)
-                .FirstAsync(user => user.Id == id);
+            .FirstAsync(user => user.Id == id);
 
-            userToUpdate.Name = user.Name;
-            userToUpdate.LicensePlate = user.LicensePlate;
-            userToUpdate.Role = user.Role;
-            
-            await _context.SaveChangesAsync();
+        userToUpdate.Name = user.Name;
+        userToUpdate.LicensePlate = user.LicensePlate;
+        userToUpdate.Role = user.Role;
+
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteUser(long id)
     {
-        var user = await GetUser(id);
-        if (user == null)
-        {
-            throw new ArgumentException($"User with Id {id} does not exist");
-        }
-
-        var userEntity = new User
-        {
-            Id = user.Id,
-            Name = user.Name,
-            LicensePlate = user.LicensePlate,
-            Orders = user.OrderIds?.Select(id => new Order { Id = id }).ToList()
-        };
-
-        _context.Entry(userEntity).State = EntityState.Deleted;
+        var userToDelete = await _context.Users.FirstAsync(user => user.Id == id);
+        _context.Users.Remove(userToDelete);
         await _context.SaveChangesAsync();
     }
 }
