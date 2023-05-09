@@ -19,10 +19,10 @@ jobs:
           dotnet-version: '6.0'
 
       - name: Restore NuGet packages
-        run: dotnet restore
+        run: dotnet restore BackendTests/BackendTests.csproj
 
       - name: Build project
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release BackendTests/BackendTests.csproj
 
       - name: Run tests
         run: command dotnet test BackendTests/BackendTests.csproj
