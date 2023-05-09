@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text;
 
 namespace Backend._JWTAuth;
@@ -22,12 +23,12 @@ public class Middleware
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
         if (token != null)
-            attachUserToContext(context, userService, token);
+          await AttachUserToContext(context, userService, token);
 
         await _next(context);
     }
 
-    private async void  attachUserToContext(HttpContext context, IUserService userService, string token)
+    private async Task AttachUserToContext(HttpContext context, IUserService userService, string token)
     {
         try
         {
@@ -45,12 +46,25 @@ public class Middleware
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
-            context.Items["User"] = await userService.GetUserForAuth(userId);
+            var user = await userService.GetUserForAuth(userId);
+            if (user != null)
+            {
+                context.Items["User"] = user;
+            }
+            else
+            {
+                // Handle the case when the user is not found
+                // For example, you can return an unauthorized response
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
+            }
         }
-        catch
+        catch (SecurityTokenValidationException)
         {
-            // do nothing if jwt validation fails
-            // user is not attached to context so request won't have access to secure routes
+            // Handle JWT validation failure
+            // For example, you can return an unauthorized response
+            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            return;
         }
     }
 }
