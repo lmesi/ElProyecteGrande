@@ -1,0 +1,38 @@
+version: "3.3"
+services:
+  database:
+    image: citrom333/el_proyecte_grande_database:speedy_database
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=ElProyecte:123
+    ports:
+      - 1433:1433
+    volumes:
+      - db_data:/var/opt/mssql
+#    command: >
+#      sh -c "
+#      /opt/mssql/bin/sqlservr & sleep 20s &&
+#      /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ElProyecte:123 -Q 'IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'speedy') CREATE DATABASE speedy'"
+
+  backend:
+    image: citrom333/el_proyecte_grande_database:speedy_backend
+    build: ./backend
+    ports:
+      - 5000:5000
+    depends_on:
+      - database
+    command: >
+      sh -c "
+        dotnet ef database update &&
+        dotnet run --project Backend.csproj"
+
+  frontend:
+    image: citrom333/el_proyecte_grande_database:speedy_frontend
+    build: ./frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
