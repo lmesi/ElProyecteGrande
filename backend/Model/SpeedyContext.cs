@@ -9,10 +9,10 @@ public class SpeedyContext : DbContext
     {
     }
     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(@"DataSource=db/database.db;");
-    }
+    }*/
 
     public DbSet<User> Users { get; set; }
     public DbSet<Company> Companies { get; set; }
