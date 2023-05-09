@@ -7,10 +7,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://localhost:7200",
+        target: "http://192.168.1.5:7777",
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+    host: true, // Here
+    strictPort: true,
+    port: 5555,
   },
 })
