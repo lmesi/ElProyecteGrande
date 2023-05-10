@@ -9,7 +9,7 @@ public class SpeedyContext : DbContext
     {
         Database.SetCommandTimeout(60);
     }
-
+    
     public DbSet<User> Users { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Order> Orders { get; set; }
