@@ -143,8 +143,9 @@ public class UserService : IUserService
 
     public async Task<List<User>> GetAllUsersForAuth()
     {
-        var users = await _context.Users.Include(user => user.Orders).ToListAsync();
 
+        var users = await _context.Users.ToListAsync();
+    
         return users.Select(user => new User()
         {
             Id = user.Id,

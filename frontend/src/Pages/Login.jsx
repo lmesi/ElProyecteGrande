@@ -9,11 +9,11 @@ const fetchLogin = (username, password, navigate, setToken) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.result);
-      localStorage.setItem("username", data.result.username);
-      localStorage.setItem("role", data.result.role);
-      localStorage.setItem("id", data.result.id);
-      localStorage.setItem("token", data.result.token);
+      console.log(data);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("id", data.id);
+      localStorage.setItem("token", data.token);
 
       //setToken(localStorage.getItem("token"));
 
@@ -22,7 +22,6 @@ const fetchLogin = (username, password, navigate, setToken) => {
         : navigate(`/driver/${localStorage.getItem("id")}`);
     });
 };
-
 const Login = (
   {
     /* setToken */

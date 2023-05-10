@@ -7,10 +7,14 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://localhost:7200",
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        target: 'http://backend:5000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: false
       },
     },
+    host: true, // Here
+    strictPort: true,
+    port: 3000,
   },
 })

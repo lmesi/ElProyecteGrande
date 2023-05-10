@@ -10,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SpeedyContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConfiguration")));
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConfiguration"));
+});
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
@@ -49,7 +51,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.UseMiddleware<Middleware>();
 
