@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
-
+DatabaseManagementService.MigrationInitialisation(app);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
