@@ -10,11 +10,6 @@ public class SpeedyContext : DbContext
         Database.SetCommandTimeout(60);
     }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     // Set the query timeout to 60 seconds
-    // }
-
     public DbSet<User> Users { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Order> Orders { get; set; }

@@ -24,8 +24,4 @@
       <Folder Include="db\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="WebApi.csproj" />
-    </ItemGroup>
-
 </Project>

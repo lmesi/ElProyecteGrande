@@ -9,7 +9,6 @@ namespace Backend.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // migrationBuilder.Sql("CREATE DATABASE IF NOT EXISTS speedy;");
             migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new

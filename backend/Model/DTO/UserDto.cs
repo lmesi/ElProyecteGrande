@@ -12,7 +12,6 @@ public class UserDto
     public long Id { get; set; }
     public string Name { get; set; }
     public string Password { get; set; }
-    [JsonIgnore]
     public string LicensePlate { get; set; }
     public Role Role { get; set; }
 }
