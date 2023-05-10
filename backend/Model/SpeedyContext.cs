@@ -7,7 +7,6 @@ public class SpeedyContext : DbContext
 {
     public SpeedyContext(DbContextOptions<SpeedyContext> options) : base(options)
     {
-        Database.SetCommandTimeout(60);
     }
     
     public DbSet<User> Users { get; set; }
