@@ -19,9 +19,4 @@
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.29.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="db" />
-      <Folder Include="db\" />
-    </ItemGroup>
-
 </Project>

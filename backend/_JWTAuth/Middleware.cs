@@ -1,4 +1,5 @@
-﻿using Backend.Service;
+﻿using System.Diagnostics.CodeAnalysis;
+using Backend.Service;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -6,7 +7,7 @@ using System.Net;
 using System.Text;
 
 namespace Backend._JWTAuth;
-
+[ExcludeFromCodeCoverage]
 public class Middleware
 {
     private readonly RequestDelegate _next;

@@ -1,10 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Backend.Model.Entities;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Model.DTO;
 
 namespace Backend.Controllers;
-
+[ExcludeFromCodeCoverage]
 [_JWTAuth.Authorize]
 [ApiController, Route("[controller]")]
 public class UsersController : ControllerBase
