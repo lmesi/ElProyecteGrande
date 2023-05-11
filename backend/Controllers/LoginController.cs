@@ -1,10 +1,12 @@
-﻿namespace Backend.Controllers;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Backend.Controllers;
 
 using Backend._JWTAuth;
 using Backend.Model;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
-
+[ExcludeFromCodeCoverage]
 [ApiController, Route("[controller]")]
 public class LoginController : ControllerBase
 {

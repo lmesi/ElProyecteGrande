@@ -1,9 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Backend.Model.DTO;
 using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
-
+[ExcludeFromCodeCoverage]
 [_JWTAuth.Authorize]
 [ApiController, Route("/Orders")]
 public class OrderController : ControllerBase

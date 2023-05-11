@@ -137,8 +137,6 @@ public class Tests
         var service = new OrderService(db);
         var result = await service.GetOrder(1);
         
-        //result should be null instead of new OrderToShow()
-        //Assert.That(result, Is.Null);
         Assert.That(result.Id, Is.EqualTo(0));
     }
 

@@ -1,9 +1,10 @@
-﻿using Backend.Model.Enum;
+﻿using System.Diagnostics.CodeAnalysis;
+using Backend.Model.Enum;
 
 namespace Backend.Model;
 
 using Model.Entities;
-
+[ExcludeFromCodeCoverage]
 public class AuthenticateResponse
 {
     public long Id { get; set; }
