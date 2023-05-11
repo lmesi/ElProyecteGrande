@@ -53,6 +53,7 @@ const Login = (
         className="form-control"
         placeholder="Password"
         value={password}
+        type="password"
         onChange={(event) => setPassword(event.target.value)}
       />
       <button className="deleteButtonForPopUp" onClick={handleLogin}>
