@@ -45,6 +45,9 @@ export default function AddOrDeleteGoods(props) {
         setGoodsData([]);
         setShow(false);
     };
+    let cancel = () => {
+        setShow(false);
+    };
 
     const setGoodsForDelete = (toDelete) => {
         setGoods(toDelete);
@@ -58,14 +61,17 @@ export default function AddOrDeleteGoods(props) {
                             Add new goods:
                             <input className="form-control" type="text" value={goods} onChange={(e) => setGoods(e.target.value)} />
                         </label>
-                        <input className="btn btn-primary deleteGoodsBtn" type="submit" value="Submit" />
+                        <input className="btn btn-primary addOrDeleteGoodsBtn" type="submit" value="Submit" />
                         <label>
                             Delete this record of goods:
                             <select className="form-select" value={goods} name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
                                 <option value="" disabled selected hidden>select goods</option>
                                 {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
                             </select>
-                            <button className="btn btn-primary deleteGoodsBtn" onClick={(e) => { e.preventDefault(); deleteGoods(); }}>Delete</button>
+                            <button className="btn btn-primary addOrDeleteGoodsBtn" onClick={(e) => { e.preventDefault(); deleteGoods(); }}>Delete</button>
+                        </label>
+                        <label>
+                            <button className="btn btn-primary addOrDeleteGoodsBtn" onClick={(e) => { e.preventDefault(); cancel(); }}>Cancel</button>
                         </label>
                     </div>
                 </form>
