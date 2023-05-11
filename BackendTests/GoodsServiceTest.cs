@@ -57,7 +57,7 @@ public class GoodsServiceTest
     }
 
     [Test]
-    public async Task GetAllCompaniesTest()
+    public async Task GetAllGoodsTest()
     {
         var goods = await _goodsService.GetAllGoods();
 
