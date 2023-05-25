@@ -4,6 +4,7 @@ import Delete from "../Components/Delete";
 import Filter from "../Components/Filter";
 
 function OrdersListPage() {
+    const [loading, setLoading] =useState(true)
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filterOptions, setFilterOptions] = useState({
@@ -15,8 +16,8 @@ function OrdersListPage() {
         6: "",
     });
 
-    function fetchData() {
-        fetch("/api/Orders", {
+    async function fetchData() {
+      await fetch("/api/Orders", {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -25,13 +26,14 @@ function OrdersListPage() {
             .then((response) => response.json())
             .then((json) => {
                 setData(json);
-                setFilteredData(json);
+                setFilteredData(json)
             })
+          .then(setLoading(false))
             .catch((e) => console.log(e.message));
     }
 
-    useEffect(() => {
-        if (localStorage.getItem("role") == "1") {
+    useEffect( () => {
+        if (localStorage.getItem("role") === "1") {
             fetchData();
         } else {
             localStorage.clear();
@@ -118,17 +120,17 @@ function OrdersListPage() {
         <div className="tableContainer">
             <div className="row justify-content-center">
                 <h1 className="titles">Orders</h1>
-                {data.length > 0 ? <div className="row justify-content-center">
+                {!loading ? <div className="row justify-content-center">
                     <table className="table table-striped table-dark table-hover">
                         <thead className="tableHead">
                             <tr>
                                 <th>Order Id</th>
-                                <th>Company name <div><Filter whatToFilter={data.map(order => order.companyName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 1)} /></div></th>
-                                <th>Loading place <div><Filter whatToFilter={data.map(order => order.loadingAddress).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 2)} /></div></th>
-                                <th>Unloading place<div><Filter whatToFilter={data.map(order => order.unloadingAddress).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 3)} /></div></th>
+                                <th>Company name <div><Filter whatToFilter={data.map(order => order.companyName).filter((x, i, a) => a.indexOf(x) === i)} onFilterSelect={e => handleFiltering(e, 1)} /></div></th>
+                                <th>Loading place <div><Filter whatToFilter={data.map(order => order.loadingAddress).filter((x, i, a) => a.indexOf(x) === i)} onFilterSelect={e => handleFiltering(e, 2)} /></div></th>
+                                <th>Unloading place<div><Filter whatToFilter={data.map(order => order.unloadingAddress).filter((x, i, a) => a.indexOf(x) === i)} onFilterSelect={e => handleFiltering(e, 3)} /></div></th>
                                 <th>Unloading time<div><Filter whatToFilter={["Finished", "Not finished"]} onFilterSelect={e => handleFiltering(e, 4)} /></div></th>
-                                <th>Driver<div><Filter whatToFilter={data.map(order => order.userName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 5)} /></div></th>
-                                <th>Goods<div><Filter whatToFilter={data.map(order => order.goodsName).filter((x, i, a) => a.indexOf(x) == i)} onFilterSelect={e => handleFiltering(e, 6)} /></div></th>
+                                <th>Driver<div><Filter whatToFilter={data.map(order => order.userName).filter((x, i, a) => a.indexOf(x) === i)} onFilterSelect={e => handleFiltering(e, 5)} /></div></th>
+                                <th>Goods<div><Filter whatToFilter={data.map(order => order.goodsName).filter((x, i, a) => a.indexOf(x) === i)} onFilterSelect={e => handleFiltering(e, 6)} /></div></th>
                                 <th></th>
                                 <th></th>
                             </tr>
