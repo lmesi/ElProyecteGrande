@@ -13,6 +13,7 @@ import AddUser from "./Pages/AddUser";
 import Users from "./Pages/Users";
 import UpdateUser from "./Pages/UpdateUser";
 import DriverOrders from "./Pages/DriverOrders";
+import WrongPage from "./Pages/WrongPage";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
         path: `/driver/:id`,
         element: <DriverOrders />,
       },
+      {
+        path: "*",
+        element: <WrongPage />
+      }
     ],
   },
 ]);
