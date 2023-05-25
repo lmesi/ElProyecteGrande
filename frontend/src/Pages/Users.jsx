@@ -177,7 +177,7 @@ const Modal = ({ close, onDelete, id, name }) => {
   return (
     <div className="blackout">
       <div className="popup">
-        <h3>Would You like to delete the company named "{name}"?</h3>
+        <h3>Would You like to delete the user named "{name}"?</h3>
         <button className="deleteButtonForPopUp" onClick={() => onDelete(id)}>
           Delete
         </button>
