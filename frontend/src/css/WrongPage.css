@@ -1,0 +1,23 @@
+.WrongPage {
+    align-content: center;
+    place-content: space-between;
+    color: whitesmoke;
+    background-color: #cf7c00;
+    width: 100vw;
+    height: 100vh;
+}
+.backButton {
+    background-color: #e45000;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.backButton:hover {
+    background-color: #923300;
+}
