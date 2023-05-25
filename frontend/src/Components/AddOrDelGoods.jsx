@@ -59,12 +59,12 @@ export default function AddOrDeleteGoods(props) {
                     <div className="formElement">
                         <label>
                             Add new goods:
-                            <input className="form-control" type="text" value={goods} onChange={(e) => setGoods(e.target.value)} />
+                            <input className="form-control" type="text" onChange={(e) => setGoods(e.target.value)} />
                         </label>
                         <input className="btn btn-primary addOrDeleteGoodsBtn" type="submit" value="Submit" />
                         <label>
                             Delete this record of goods:
-                            <select className="form-select" value={goods} name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
+                            <select className="form-select" name="Goods" onChange={(e) => setGoodsForDelete(e.target.value)}>
                                 <option value="" disabled selected hidden>select goods</option>
                                 {goodsData.map(goods => (<option key={`goods${goods.id}`} value={goods.id} >{goods.name} </option>))}
                             </select>
