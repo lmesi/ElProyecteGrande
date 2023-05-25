@@ -47,7 +47,22 @@ const UserForm = ({ onSave, user, isDisabled }) => {
         <div className="form-group">
           <label>
             Password:
-            <input className="form-control" id="password" name="password" />
+            <input 
+                className="form-control" 
+                id="password" 
+                name="password1"
+                type="password"
+            />
+          </label>
+          <label>
+            Confirm password:
+            <input
+                className="form-control"
+                id="password2"
+                name="password2"
+                type="password"
+            />
+            {/*MAKE SURE THEY ARE THE SAME!!!*/}
           </label>
         </div>
       )}
